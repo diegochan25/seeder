@@ -5,3 +5,4 @@ class SchemaGenerator(Document):
     _id: ObjectId
     type_id: ObjectId
     name: str
+    label: str

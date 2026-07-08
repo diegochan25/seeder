@@ -1,1 +1,212 @@
 @import 'tailwindcss';
+
+@font-face {
+    src: url('/static/font/JetBrainsMono-VariableFont_wght.ttf') format('truetype');
+    font-family: 'JetBrains Mono';
+    font-style: normal;
+    font-weight: 100 900;
+    font-display: swap;
+}
+
+@font-face {
+    src: url('/static/font/JetBrainsMono-Italic-VariableFont_wght.ttf') format('truetype');
+    font-family: 'JetBrains Mono';
+    font-style: italic;
+    font-weight: 100 900;
+    font-display: swap;
+}
+
+@theme {
+    --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+}
+
+body {
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    color-scheme: dark;
+    background-color: var(--color-zinc-900);
+    color: white;
+    font-family: var(--font-mono);
+}
+
+button, a, input[type="submit"], input[type="reset"] {
+    cursor: pointer;
+}
+
+i.bi {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    height: fit-content;
+    width: fit-content;
+}
+
+.btn {
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 0.375rem;
+    padding: 0.25rem 0.75rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: background-color 150ms linear, border-color 150ms linear;
+}
+
+.btn-primary {
+    background-color: var(--color-yellow-300);
+    border-color: var(--color-yellow-300);
+    color: black;
+
+    &:hover {
+        background-color: var(--color-yellow-400);
+        border-color: var(--color-yellow-400);
+    }
+}
+
+
+.btn-ghost {
+    background-color: transparent;
+    border-color: var(--color-zinc-400);
+    color: var(--color-zinc-400);
+
+    &:hover {
+        border-color: var(--color-zinc-500);
+        color: var(--color-zinc-500);
+    }
+}
+
+
+.tooltip:not([data-tip=""]) {
+    position: relative;
+    width: fit-content;
+}
+
+.tooltip:not([data-tip=""])::before {
+    width: max-content;
+    content: attr(data-tip);
+    position: absolute;
+    padding-block: 0.125rem;
+    padding-inline: 0.5rem;
+    color: white;
+    background-color: black;
+    border-radius: 0.25rem;
+    pointer-events: none;
+    user-select: none;
+    opacity: 0;
+    transition: opacity 300ms ease, transform 300ms ease;
+}
+
+.tooltip:not([data-tip=""]):hover::before,
+.tooltip:not([data-tip=""]):focus-visible::before {
+    opacity: 1;
+}
+
+.tooltip:not([data-tip=""])::after {
+    content: '';
+    position: absolute;
+    pointer-events: none;
+    user-select: none;
+    opacity: 0;
+    transition: opacity 300ms ease, transform 300ms ease;
+}
+
+.tooltip:not([data-tip=""]):hover::after,
+.tooltip:not([data-tip=""]):focus-visible::after {
+    opacity: 1;
+}
+
+.tooltip.top:not([data-tip=""])::before {
+    bottom: calc(100% + 0.375rem + 0.25rem);
+    left: 50%;
+    transform: translateX(-50%) translateY(0.5rem);
+}
+
+.tooltip.bottom:not([data-tip=""])::before {
+    top: calc(100% + 0.375rem + 0.25rem);
+    left: 50%;
+    transform: translateX(-50%) translateY(calc(0.5rem * -1));
+}
+
+.tooltip.left:not([data-tip=""])::before {
+    right: calc(100% + 0.375rem + 0.25rem);
+    top: 50%;
+    transform: translateX(0.5rem) translateY(-50%);
+}
+
+.tooltip.right:not([data-tip=""])::before {
+    left: calc(100% + 0.375rem + 0.25rem);
+    top: 50%;
+    transform: translateX(calc(0.5rem * -1)) translateY(-50%);
+}
+
+.tooltip.top:not([data-tip=""]):hover::before,
+.tooltip.top:not([data-tip=""]):focus-visible::before,
+.tooltip.bottom:not([data-tip=""]):hover::before,
+.tooltip.bottom:not([data-tip=""]):focus-visible::before {
+    transform: translateX(-50%) translateY(0);
+}
+
+.tooltip.left:not([data-tip=""]):hover::before,
+.tooltip.left:not([data-tip=""]):focus-visible::before,
+.tooltip.right:not([data-tip=""]):hover::before,
+.tooltip.right:not([data-tip=""]):focus-visible::before {
+    transform: translateX(0) translateY(-50%);
+}
+
+
+.tooltip.top:not([data-tip=""])::after {
+    border-left: 0.375rem solid transparent;
+    border-right: 0.375rem solid transparent;
+    border-top: 0.375rem solid black;
+    bottom: calc(100% + 0.375rem - 1px);
+    left: 50%;
+    transform: translateX(-50%) translateY(0.5rem);
+}
+
+.tooltip.bottom:not([data-tip=""])::after {
+    border-left: 0.375rem solid transparent;
+    border-right: 0.375rem solid transparent;
+    border-bottom: 0.375rem solid black;
+    top: calc(100% + 0.375rem - 1px);
+    left: 50%;
+    transform: translateX(-50%) translateY(calc(0.5rem * -1));
+}
+
+.tooltip.left:not([data-tip=""])::after {
+    border-top: 0.375rem solid transparent;
+    border-bottom: 0.375rem solid transparent;
+    border-left: 0.375rem solid black;
+    right: calc(100% + 0.375rem - 1px);
+    top: 50%;
+    transform: translateX(0.5rem) translateY(-50%);
+}
+
+.tooltip.right:not([data-tip=""])::after {
+    border-top: 0.375rem solid transparent;
+    border-bottom: 0.375rem solid transparent;
+    border-right: 0.375rem solid black;
+    left: calc(100% + 0.375rem - 1px);
+    top: 50%;
+    transform: translateX(calc(0.5rem * -1)) translateY(-50%);
+}
+
+
+.tooltip.top:not([data-tip=""]):hover::after,
+.tooltip.top:not([data-tip=""]):focus-visible::after,
+.tooltip.bottom:not([data-tip=""]):hover::after,
+.tooltip.bottom:not([data-tip=""]):focus-visible::after {
+    transform: translateX(-50%) translateY(0);
+}
+
+.tooltip.left:not([data-tip=""]):hover::after,
+.tooltip.left:not([data-tip=""]):focus-visible::after,
+.tooltip.right:not([data-tip=""]):hover::after,
+.tooltip.right:not([data-tip=""]):focus-visible::after {
+    transform: translateX(0) translateY(-50%);
+}

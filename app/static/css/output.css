@@ -1,11 +1,31 @@
 /*! tailwindcss v4.1.11 | MIT License | https://tailwindcss.com */
+@layer properties;
 @layer theme, base, components, utilities;
 @layer theme {
   :root, :host {
     --font-sans: ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
     'Noto Color Emoji';
-    --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New',
-    monospace;
+    --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+    --color-yellow-300: oklch(90.5% 0.182 98.111);
+    --color-yellow-400: oklch(85.2% 0.199 91.936);
+    --color-zinc-300: oklch(87.1% 0.006 286.286);
+    --color-zinc-400: oklch(70.5% 0.015 286.067);
+    --color-zinc-500: oklch(55.2% 0.016 285.938);
+    --color-zinc-600: oklch(44.2% 0.017 285.786);
+    --color-zinc-800: oklch(27.4% 0.006 286.033);
+    --color-zinc-900: oklch(21% 0.006 285.885);
+    --spacing: 0.25rem;
+    --text-sm: 0.875rem;
+    --text-sm--line-height: calc(1.25 / 0.875);
+    --text-base: 1rem;
+    --text-base--line-height: calc(1.5 / 1);
+    --text-2xl: 1.5rem;
+    --text-2xl--line-height: calc(2 / 1.5);
+    --text-3xl: 1.875rem;
+    --text-3xl--line-height: calc(2.25 / 1.875);
+    --font-weight-normal: 400;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
     --default-font-family: var(--font-sans);
     --default-mono-font-family: var(--font-mono);
   }
@@ -158,5 +178,301 @@
 @layer utilities {
   .static {
     position: static;
+  }
+  .block {
+    display: block;
+  }
+  .flex {
+    display: flex;
+  }
+  .h-full {
+    height: 100%;
+  }
+  .w-80 {
+    width: calc(var(--spacing) * 80);
+  }
+  .w-full {
+    width: 100%;
+  }
+  .flex-1 {
+    flex: 1;
+  }
+  .flex-col {
+    flex-direction: column;
+  }
+  .items-center {
+    align-items: center;
+  }
+  .gap-2 {
+    gap: calc(var(--spacing) * 2);
+  }
+  .gap-4 {
+    gap: calc(var(--spacing) * 4);
+  }
+  .border-r {
+    border-right-style: var(--tw-border-style);
+    border-right-width: 1px;
+  }
+  .border-b {
+    border-bottom-style: var(--tw-border-style);
+    border-bottom-width: 1px;
+  }
+  .border-zinc-600 {
+    border-color: var(--color-zinc-600);
+  }
+  .bg-zinc-800 {
+    background-color: var(--color-zinc-800);
+  }
+  .px-8 {
+    padding-inline: calc(var(--spacing) * 8);
+  }
+  .py-3 {
+    padding-block: calc(var(--spacing) * 3);
+  }
+  .py-8 {
+    padding-block: calc(var(--spacing) * 8);
+  }
+  .text-2xl {
+    font-size: var(--text-2xl);
+    line-height: var(--tw-leading, var(--text-2xl--line-height));
+  }
+  .text-3xl {
+    font-size: var(--text-3xl);
+    line-height: var(--tw-leading, var(--text-3xl--line-height));
+  }
+  .text-base {
+    font-size: var(--text-base);
+    line-height: var(--tw-leading, var(--text-base--line-height));
+  }
+  .text-sm {
+    font-size: var(--text-sm);
+    line-height: var(--tw-leading, var(--text-sm--line-height));
+  }
+  .font-bold {
+    --tw-font-weight: var(--font-weight-bold);
+    font-weight: var(--font-weight-bold);
+  }
+  .font-normal {
+    --tw-font-weight: var(--font-weight-normal);
+    font-weight: var(--font-weight-normal);
+  }
+  .font-semibold {
+    --tw-font-weight: var(--font-weight-semibold);
+    font-weight: var(--font-weight-semibold);
+  }
+  .text-yellow-300 {
+    color: var(--color-yellow-300);
+  }
+  .text-zinc-500 {
+    color: var(--color-zinc-500);
+  }
+  .uppercase {
+    text-transform: uppercase;
+  }
+  .not-italic {
+    font-style: normal;
+  }
+  .no-underline {
+    text-decoration-line: none;
+  }
+  .duration-150 {
+    --tw-duration: 150ms;
+    transition-duration: 150ms;
+  }
+  .\*\:px-6 {
+    :is(& > *) {
+      padding-inline: calc(var(--spacing) * 6);
+    }
+  }
+  .hover\:text-zinc-300 {
+    &:hover {
+      @media (hover: hover) {
+        color: var(--color-zinc-300);
+      }
+    }
+  }
+}
+@font-face {
+  src: url('/static/font/JetBrainsMono-VariableFont_wght.ttf') format('truetype');
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+}
+@font-face {
+  src: url('/static/font/JetBrainsMono-Italic-VariableFont_wght.ttf') format('truetype');
+  font-family: 'JetBrains Mono';
+  font-style: italic;
+  font-weight: 100 900;
+  font-display: swap;
+}
+body {
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  color-scheme: dark;
+  background-color: var(--color-zinc-900);
+  color: white;
+  font-family: var(--font-mono);
+}
+button, a, input[type="submit"], input[type="reset"] {
+  cursor: pointer;
+}
+i.bi {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  height: fit-content;
+  width: fit-content;
+}
+.btn {
+  border-width: 1px;
+  border-style: solid;
+  border-radius: 0.375rem;
+  padding: 0.25rem 0.75rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: background-color 150ms linear, border-color 150ms linear;
+}
+.btn-primary {
+  background-color: var(--color-yellow-300);
+  border-color: var(--color-yellow-300);
+  color: black;
+  &:hover {
+    background-color: var(--color-yellow-400);
+    border-color: var(--color-yellow-400);
+  }
+}
+.btn-ghost {
+  background-color: transparent;
+  border-color: var(--color-zinc-400);
+  color: var(--color-zinc-400);
+  &:hover {
+    border-color: var(--color-zinc-500);
+    color: var(--color-zinc-500);
+  }
+}
+.tooltip:not([data-tip=""]) {
+  position: relative;
+  width: fit-content;
+}
+.tooltip:not([data-tip=""])::before {
+  width: max-content;
+  content: attr(data-tip);
+  position: absolute;
+  padding-block: 0.125rem;
+  padding-inline: 0.5rem;
+  color: white;
+  background-color: black;
+  border-radius: 0.25rem;
+  pointer-events: none;
+  user-select: none;
+  opacity: 0;
+  transition: opacity 300ms ease, transform 300ms ease;
+}
+.tooltip:not([data-tip=""]):hover::before, .tooltip:not([data-tip=""]):focus-visible::before {
+  opacity: 1;
+}
+.tooltip:not([data-tip=""])::after {
+  content: '';
+  position: absolute;
+  pointer-events: none;
+  user-select: none;
+  opacity: 0;
+  transition: opacity 300ms ease, transform 300ms ease;
+}
+.tooltip:not([data-tip=""]):hover::after, .tooltip:not([data-tip=""]):focus-visible::after {
+  opacity: 1;
+}
+.tooltip.top:not([data-tip=""])::before {
+  bottom: calc(100% + 0.375rem + 0.25rem);
+  left: 50%;
+  transform: translateX(-50%) translateY(0.5rem);
+}
+.tooltip.bottom:not([data-tip=""])::before {
+  top: calc(100% + 0.375rem + 0.25rem);
+  left: 50%;
+  transform: translateX(-50%) translateY(calc(0.5rem * -1));
+}
+.tooltip.left:not([data-tip=""])::before {
+  right: calc(100% + 0.375rem + 0.25rem);
+  top: 50%;
+  transform: translateX(0.5rem) translateY(-50%);
+}
+.tooltip.right:not([data-tip=""])::before {
+  left: calc(100% + 0.375rem + 0.25rem);
+  top: 50%;
+  transform: translateX(calc(0.5rem * -1)) translateY(-50%);
+}
+.tooltip.top:not([data-tip=""]):hover::before, .tooltip.top:not([data-tip=""]):focus-visible::before, .tooltip.bottom:not([data-tip=""]):hover::before, .tooltip.bottom:not([data-tip=""]):focus-visible::before {
+  transform: translateX(-50%) translateY(0);
+}
+.tooltip.left:not([data-tip=""]):hover::before, .tooltip.left:not([data-tip=""]):focus-visible::before, .tooltip.right:not([data-tip=""]):hover::before, .tooltip.right:not([data-tip=""]):focus-visible::before {
+  transform: translateX(0) translateY(-50%);
+}
+.tooltip.top:not([data-tip=""])::after {
+  border-left: 0.375rem solid transparent;
+  border-right: 0.375rem solid transparent;
+  border-top: 0.375rem solid black;
+  bottom: calc(100% + 0.375rem - 1px);
+  left: 50%;
+  transform: translateX(-50%) translateY(0.5rem);
+}
+.tooltip.bottom:not([data-tip=""])::after {
+  border-left: 0.375rem solid transparent;
+  border-right: 0.375rem solid transparent;
+  border-bottom: 0.375rem solid black;
+  top: calc(100% + 0.375rem - 1px);
+  left: 50%;
+  transform: translateX(-50%) translateY(calc(0.5rem * -1));
+}
+.tooltip.left:not([data-tip=""])::after {
+  border-top: 0.375rem solid transparent;
+  border-bottom: 0.375rem solid transparent;
+  border-left: 0.375rem solid black;
+  right: calc(100% + 0.375rem - 1px);
+  top: 50%;
+  transform: translateX(0.5rem) translateY(-50%);
+}
+.tooltip.right:not([data-tip=""])::after {
+  border-top: 0.375rem solid transparent;
+  border-bottom: 0.375rem solid transparent;
+  border-right: 0.375rem solid black;
+  left: calc(100% + 0.375rem - 1px);
+  top: 50%;
+  transform: translateX(calc(0.5rem * -1)) translateY(-50%);
+}
+.tooltip.top:not([data-tip=""]):hover::after, .tooltip.top:not([data-tip=""]):focus-visible::after, .tooltip.bottom:not([data-tip=""]):hover::after, .tooltip.bottom:not([data-tip=""]):focus-visible::after {
+  transform: translateX(-50%) translateY(0);
+}
+.tooltip.left:not([data-tip=""]):hover::after, .tooltip.left:not([data-tip=""]):focus-visible::after, .tooltip.right:not([data-tip=""]):hover::after, .tooltip.right:not([data-tip=""]):focus-visible::after {
+  transform: translateX(0) translateY(-50%);
+}
+@property --tw-border-style {
+  syntax: "*";
+  inherits: false;
+  initial-value: solid;
+}
+@property --tw-font-weight {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-duration {
+  syntax: "*";
+  inherits: false;
+}
+@layer properties {
+  @supports ((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
+    *, ::before, ::after, ::backdrop {
+      --tw-border-style: solid;
+      --tw-font-weight: initial;
+      --tw-duration: initial;
+    }
   }
 }

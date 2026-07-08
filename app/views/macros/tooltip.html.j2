@@ -1,0 +1,5 @@
+{% macro tooltip(tip, position) %}
+<div role="tooltip" data-tip="{{ tip }}" class="tooltip {{position}} text-base font-normal not-italic no-underline" tabindex="0">
+    {{ caller() }}
+</div>
+{% endmacro %}

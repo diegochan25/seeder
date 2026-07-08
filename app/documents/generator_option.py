@@ -7,6 +7,7 @@ class GeneratorOption(Document):
     _id: ObjectId
     generator_id: ObjectId
     name: str
+    label: str
     type: OptionType
     default: Any | None
     choose_from: list[Any]

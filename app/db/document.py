@@ -9,7 +9,7 @@ from inflect import engine
 from pymongo.database import Database
 from pymongo.collection import Collection
 from app.db.client import client
-from app.dependencies import RequiresInflect
+from app.dependencies import get_inflect_engine
 
 
 class Document(ABC):
@@ -22,10 +22,10 @@ class Document(ABC):
     collection: Collection
     _id: ObjectId
 
-    def __init_subclass__(cls, inflect: RequiresInflect):
+    def __init_subclass__(cls):
         cls.client = client
-        cls.inflect = inflect
-        cls.collection_name = snake_case(inflect.plural(cls.__name__))
+        cls.inflect = get_inflect_engine()
+        cls.collection_name = snake_case(cls.inflect.plural(cls.__name__))
 
         cls.db = client.get_database(cls.__database_name__)
         cls.collection = cls.db.get_collection(cls.collection_name)
@@ -53,7 +53,7 @@ class Document(ABC):
         return cls.collection.find().skip(offset).limit(limit)
     
     @classmethod
-    def list(cls, limit: int, offset: int) -> list[Self]:
+    def list(cls, limit: int = 0, offset: int = 0) -> list[Self]:
         return [cls.of(document) for document in list(cls.cursor(limit, offset))]
 
     @classmethod

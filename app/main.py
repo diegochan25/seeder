@@ -1,12 +1,13 @@
-from pathlib import Path
-
-from fastapi import FastAPI
-from fastapi.staticfiles import StaticFiles
-from fastapi_tailwind import tailwind
 from contextlib import asynccontextmanager
+from pathlib import Path
+from fastapi import FastAPI, HTTPException
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
+from fastapi_tailwind import tailwind
+from app.controllers import seeds
 
-base_dir = Path(__file__).resolve().parent
-static_dir = base_dir / 'static'
+dirname = Path(__file__).resolve().parent
+static_dir = dirname / 'static'
 
 
 @asynccontextmanager
@@ -21,3 +22,9 @@ async def lifespan(_: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 app.mount('/static', StaticFiles(directory=static_dir), name='static')
+
+app.include_router(seeds.router)
+
+@app.get('/')
+def index():
+    raise HTTPException(301, headers={ 'location': '/seeds/' })

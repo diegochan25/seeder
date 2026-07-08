@@ -1,7 +1,7 @@
 from bson import ObjectId
 from app.db.document import Document
 
-class SchemaType(Document):
+class Schema(Document):
     _id: ObjectId
+    seed_id: ObjectId
     name: str
-    label: str
