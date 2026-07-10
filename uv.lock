@@ -439,6 +439,7 @@ dependencies = [
     { name = "pymongo" },
     { name = "python-multipart" },
     { name = "python-slugify" },
+    { name = "slugify" },
     { name = "uvicorn" },
 ]
 
@@ -454,8 +455,15 @@ requires-dist = [
     { name = "pymongo", specifier = ">=4.17.0" },
     { name = "python-multipart", specifier = ">=0.0.32" },
     { name = "python-slugify", specifier = ">=8.0.4" },
+    { name = "slugify", specifier = ">=0.0.1" },
     { name = "uvicorn", specifier = ">=0.50.2" },
 ]
+
+[[package]]
+name = "slugify"
+version = "0.0.1"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/7b/89/fbb7391d777b60c82d4e1376bb181b98e75adf506b3f7ffe837eca64570b/slugify-0.0.1.tar.gz", hash = "sha256:c5703cc11c1a6947536f3ce8bb306766b8bb5a84a53717f5a703ce0f18235e4c", size = 1156, upload-time = "2010-12-07T16:36:05.53Z" }
 
 [[package]]
 name = "starlette"

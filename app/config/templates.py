@@ -6,8 +6,8 @@ from fastapi.templating import Jinja2Templates
 from app.documents.seed import Seed
 from app.schemas.internal.current import Current
 
-dirname = Path(__file__).resolve().parent.parent
 
+dirname = Path(__file__).resolve().parent.parent
 
 def inject_panel_context(request: Request) -> dict[str, Any]:
     current: Current | None = getattr(request.state, 'current', None)
@@ -27,6 +27,6 @@ def inject_panel_context(request: Request) -> dict[str, Any]:
 
 
 templates = Jinja2Templates(directory=dirname / 'views', context_processors=[inject_panel_context])
-templates.env.globals['layout'] = lambda x: str(Path('layouts') / x)
-templates.env.globals['partial'] = lambda x: str(Path('partials') / x)
-templates.env.globals['macro'] = lambda x: str(Path('macros') / x)
+templates.env.globals['layout'] = lambda x: f'layouts/{x}'
+templates.env.globals['partial'] = lambda x: f'partials/{x}'
+templates.env.globals['macro'] = lambda x: f'macros/{x}'

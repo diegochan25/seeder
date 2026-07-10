@@ -15,5 +15,6 @@ dependencies = [
     "pymongo>=4.17.0",
     "python-multipart>=0.0.32",
     "python-slugify>=8.0.4",
+    "slugify>=0.0.1",
     "uvicorn>=0.50.2",
 ]
