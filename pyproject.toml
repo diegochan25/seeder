@@ -5,6 +5,7 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.14"
 dependencies = [
+    "argon2-cffi>=25.1.0",
     "case-convert>=1.1.0",
     "fastapi>=0.139.0",
     "fastapi-tailwind>=2.0.4a1",
@@ -12,5 +13,7 @@ dependencies = [
     "jinja2>=3.1.6",
     "pydantic-settings>=2.14.2",
     "pymongo>=4.17.0",
+    "python-multipart>=0.0.32",
+    "python-slugify>=8.0.4",
     "uvicorn>=0.50.2",
 ]

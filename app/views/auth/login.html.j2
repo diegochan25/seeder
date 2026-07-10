@@ -1,0 +1,67 @@
+{% extends layout('base.html.j2') %}
+
+{% block body %}
+<div class="flex w-screen h-screen p-px gap-px bg-zinc-500">
+<div class="flex-3 flex flex-col bg-plus-pattern p-12">
+    <div class="flex items-center gap-2">
+        <i class="bi bi-braces text-3xl text-yellow-300"></i>
+        <h1 class="text-2xl font-semibold">Seeder</h1>
+    </div>
+    <div class="flex-1 flex items-center">
+    {% include partial('_sample_output.html.j2') %}
+    </div>
+    <div class="max-w-sm">
+        <h1 class="text-3xl font-bold">Seed your database with realistic data.</h1>
+        <p class="text-zinc-400">
+            Define schemas, generate rows,
+            maintain referential integrity.
+        </p>
+    </div>
+</div>
+<div class="flex-2 flex justify-center items-center bg-zinc-900 px-8 py-4">
+    <div class="flex flex-col w-full max-w-lg mx-auto gap-8 ">
+        <div class="w-full">
+            <h1 class="text-2xl font-bold">Sign in</h1>
+            <p class="text-zinc-400">
+                Welcome back — enter your 
+                credentials below
+            </p>
+        </div>
+        <form method="post" action="/auth/login/" class="contents">
+            <div class="w-full space-y-2">
+                <label for="email" class="opacity-70">Email address</label>
+                <input 
+                    type="email" 
+                    name="email" 
+                    id="email" 
+                    class="w-full rounded px-2 py-1 border border-zinc-600 outline-2 outline-transparent hover:outline-blue-500 duration-150"
+                >
+            </div>
+            <div class="w-full space-y-2" x-data="{ type: 'password' }">
+                <div class="flex items-center justify-between">
+                    <label for="password" class="opacity-70">Password</label>
+                    <button 
+                        type="button"
+                        class="link text-sm" 
+                        x-text="type === 'password' ? 'Show' : 'Hide'" 
+                        x-on:click="type = (type === 'password' ? 'text' : 'password')"
+                    ></button>
+                </div>
+                <input 
+                    x-bind:type="type"
+                    name="password" 
+                    id="password" 
+                    class="w-full rounded px-2 py-1 border border-zinc-600 outline-2 outline-transparent hover:outline-blue-500 duration-150"
+                >
+            </div>
+            <div class="w-full">
+                <button type="submit" class="w-full btn btn-primary">
+                    Sign in
+                    <i class="bi bi-arrow-right-short py-2.5"></i>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+</div>
+{% endblock %}

@@ -1,0 +1,7 @@
+{% macro dialog(id) %}
+<dialog id="{{ id }}" class="dialog" closedby="any" popover>
+    <div class="card">
+        {{ caller() }}
+    </div>
+</dialog>
+{% endmacro %}

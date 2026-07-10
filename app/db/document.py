@@ -9,13 +9,12 @@ from inflect import engine
 from pymongo.database import Database
 from pymongo.collection import Collection
 from app.db.client import client
-from app.dependencies import get_inflect_engine
 
 
 class Document(ABC):
     __database_name__ = 'seeder'
     client: MongoClient
-    inflect: engine
+    inflect = engine()
     collection_name: str
 
     db: Database
@@ -24,13 +23,13 @@ class Document(ABC):
 
     def __init_subclass__(cls):
         cls.client = client
-        cls.inflect = get_inflect_engine()
         cls.collection_name = snake_case(cls.inflect.plural(cls.__name__))
 
         cls.db = client.get_database(cls.__database_name__)
         cls.collection = cls.db.get_collection(cls.collection_name)
 
     def __init__(self, **kwargs: Any):
+        self._id = kwargs.pop('_id', None) or ObjectId()
         for name, value in kwargs.items():
             setattr(self, name, value)
 
@@ -67,16 +66,32 @@ class Document(ABC):
             return None
         return cls.of(result)
 
+    @classmethod
+    def find_by(cls, **kwargs: Any) -> Self | None:
+        result = cls.collection.find_one(kwargs)
+        if result is None:
+            return None
+        return cls.of(result)
+    
+    @classmethod
+    def cursor_by(cls, **kwargs: Any) -> Cursor:
+        return cls.collection.find(kwargs)
+    
+    @classmethod
+    def list_by(cls, **kwargs: Any) -> list[Self]:
+        return [cls.of(document) for document in list(cls.cursor_by(**kwargs))]
+
     def exists(self) -> bool:
         return self.collection.count_documents({'_id': self._id}) == 1
 
-    def save(self) -> Self | None:
-        return self.collection.find_one_and_update(
+    def save(self) -> Self:
+        self.collection.find_one_and_update(
             {'_id': self._id},
             {'$set': self.serialize()},
             upsert=True,
             return_document=ReturnDocument.AFTER
         )
+        return self
     
     def delete(self) -> bool:
         try:
