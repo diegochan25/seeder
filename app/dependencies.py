@@ -1,7 +1,7 @@
 from datetime import datetime, timezone
-from typing import Annotated
+from typing import Annotated, TypeVar
 from bson import ObjectId
-from fastapi import Cookie, Depends, HTTPException, Request
+from fastapi import Cookie, Depends, Form, HTTPException, Request
 
 from app.documents.session import Session
 from app.documents.user import User
@@ -65,3 +65,6 @@ def pw_service() -> type[PasswordService]:
     return PasswordService
 
 RequiresPasswordService = Annotated[type[PasswordService], Depends(pw_service)]
+
+T = TypeVar('T')
+FromForm = Annotated[T, Form()]

@@ -3,7 +3,7 @@ from copy import deepcopy
 from typing import Any, Self
 from bson import ObjectId
 from case_convert import snake_case
-from pymongo import MongoClient, ReturnDocument
+from pymongo import IndexModel, MongoClient, ReturnDocument
 from pymongo.cursor import Cursor
 from inflect import engine
 from pymongo.database import Database
@@ -13,6 +13,7 @@ from app.db.client import client
 
 class Document(ABC):
     __database_name__ = 'seeder'
+    __indexes__: list[IndexModel] = []
     client: MongoClient
     inflect = engine()
     collection_name: str
@@ -27,6 +28,9 @@ class Document(ABC):
 
         cls.db = client.get_database(cls.__database_name__)
         cls.collection = cls.db.get_collection(cls.collection_name)
+
+        if cls.__indexes__:
+            cls.collection.create_indexes(cls.__indexes__)
 
     def __init__(self, **kwargs: Any):
         self._id = kwargs.pop('_id', None) or ObjectId()

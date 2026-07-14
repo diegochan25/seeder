@@ -1,6 +1,7 @@
 from datetime import datetime
 from typing import Self
 from bson import ObjectId
+from slugify import slugify
 from app.db.document import Document
 
 class Seed(Document):
@@ -19,3 +20,10 @@ class Seed(Document):
         if result is None:
             return None
         return cls.of(result)
+
+    @classmethod
+    def next_slug_and_index_for(cls, name: str) -> tuple[str, int]:
+        highest = cls.with_max_index_by_name(name)
+        index = highest.index + 1 if highest else 0
+        base_slug = f"{name} {index}" if index else name
+        return slugify(base_slug), index

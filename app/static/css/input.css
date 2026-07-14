@@ -281,3 +281,57 @@ i.bi {
         }
     }
 }
+
+.custom-select {
+    display: block;
+    position: relative;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.5rem;
+    width: var(--container-3xs);
+    outline-width: 2px;
+    outline-style: solid;
+    outline-color: transparent;
+    transition: outline 150ms linear;
+
+    &:focus-within {
+        outline-color: var(--color-blue-500);
+    }
+}
+
+details, details::details-content {
+    interpolate-size: allow-keywords;
+}
+
+details summary {
+    display: flex;
+    align-items: center;
+    & :first-child {
+        flex: 1;
+    }
+
+    &::after {
+        content: url('/static/img/chevron-right.svg');
+        cursor: pointer;
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        height: fit-content;
+        width: fit-content;
+        rotate: 0;
+        transition: rotate 200ms linear;
+    }
+}
+
+details[open] summary::after {
+    rotate: 90deg;
+}
+
+details::details-content {
+    overflow: hidden;
+    height: 0;
+    transition: height 300ms ease, content-visibility 300ms allow-discrete;
+}
+
+details[open]::details-content {
+    height: auto;
+}
