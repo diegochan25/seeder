@@ -1,5 +1,58 @@
 {% extends layout('seed.html.j2') %}
 
 {% block tab %}
-
+<div>
+    <span class="text-sm text-zinc-500 uppercase">Seed</span>
+    <h2 class="text-2xl font-bold">{{ seed.name }}</h2>
+</div>
+<div class="space-y-2 w-full max-w-4xl" x-data='{ disabled: true, name: {{ seed.name|tojson }}, description: {{ seed.description|tojson }} }'>
+    <div class="flex items-center">
+        <h3 class="flex-1 text-zinc-500 uppercase font-semibold">General information</h3>
+        <button
+            type="button"
+            class="btn"
+            :class="disabled ? 'btn-primary' : 'btn-ghost'"
+            x-on:click='if (!disabled) { name = {{ seed.name|tojson }}; description = {{ seed.description|tojson }}; }; disabled = !disabled'
+            x-text="disabled ? 'Edit' : 'Cancel'"
+        ></button>
+    </div>
+    <form 
+        x-on:submit.prevent="fetch($el.action, { method: 'PATCH', body: new FormData($el) }).then(r => { if (r.ok) window.location = r.headers.get('Location') })"
+        action="/seeds/{{ seed.slug }}"
+        class="grid grid-cols-2 gap-6 rounded-lg overflow-hidden w-full bg-zinc-800/75 border border-zinc-600 px-4 py-3"
+    >
+        <div class="space-y-1">
+            <label for="name" class="block text-sm font-bold uppercase">Seed name</label>
+            <input
+                type="text"
+                name="name"
+                id="name"
+                x-model="name"
+                class="w-full border border-zinc-500 disabled:border-transparent disabled:outline-transparent rounded-md outline-2 outline-transparent focus:outline-blue-500 duration-150 px-2 py-1"
+                x-bind:disabled="disabled"
+            >
+        </div>
+        <div class="space-y-1">
+            <label for="name" class="block text-sm font-bold uppercase">Created at</label>
+            <time
+                datetime="{{ seed.created_at.isoformat() }}"
+                class="block w-full px-2 py-1"
+            >{{ seed.created_at.strftime("%B %d, %Y at %I:%M %p")}}</time>
+        </div>
+        <div class="col-span-2 space-y-1">
+            <label for="description" class="block text-sm font-bold uppercase">Description</label>
+            <textarea
+                name="description"
+                id="description"
+                x-model="description"
+                placeholder="<No description>"
+                class="w-full border border-zinc-500 disabled:border-transparent disabled:outline-transparent placeholder:italic disabled:resize-none rounded-md outline-2 outline-transparent focus:outline-blue-500 duration-150 px-2 py-1 resize-y"
+                x-bind:disabled="disabled"
+            ></textarea>
+        </div>
+        <div x-show="!disabled" class="col-span-2">
+            <input type="submit" value="Save changes" class="btn btn-primary">
+        </div>
+    </form>
+</div>
 {% endblock %}

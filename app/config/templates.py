@@ -3,6 +3,7 @@ from typing import Any, Literal
 from fastapi import Request
 from fastapi.templating import Jinja2Templates
 
+from app.documents.schema import Schema
 from app.documents.seed import Seed
 from app.schemas.internal.current import Current
 
@@ -17,13 +18,14 @@ def inject_panel_context(request: Request) -> dict[str, Any]:
     sort_key: Literal['recent', 'name'] = request.query_params.get('sortBy', 'recent')
 
     seeds = Seed.list_by(user_id=current.user.id)
+    grouped_schemas = Schema.group_by_seed_ids([s._id for s in seeds])
 
     if sort_key == 'recent':
         seeds.sort(key = lambda s: s.created_at, reverse=True)
     elif sort_key == 'name':
         seeds.sort(key = lambda s: s.name)
 
-    return {'seeds': seeds}
+    return {'seeds': seeds, 'grouped_schemas': grouped_schemas}
 
 
 templates = Jinja2Templates(directory=dirname / 'views', context_processors=[inject_panel_context])

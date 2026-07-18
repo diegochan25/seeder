@@ -1,3 +1,4 @@
+import uvicorn
 from contextlib import asynccontextmanager
 from pathlib import Path
 from fastapi import FastAPI, HTTPException, Request
@@ -5,9 +6,9 @@ from fastapi.exception_handlers import http_exception_handler
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import RedirectResponse
 from fastapi.staticfiles import StaticFiles
-from fastapi.templating import Jinja2Templates
 from fastapi_tailwind import tailwind
-from app.controllers import auth, schemas, seeds
+from app.config.settings import settings
+from app.controllers import auth, fields, schemas, seeds
 
 dirname = Path(__file__).resolve().parent
 static_dir = dirname / 'static'
@@ -15,9 +16,12 @@ static_dir = dirname / 'static'
 
 @asynccontextmanager
 async def lifespan(_: FastAPI):
+    import app.core.types
+    import app.core.generators
     process = tailwind.compile(
         str(static_dir / 'css' / 'output.css'),
         tailwind_stylesheet_path=str(static_dir / 'css' / 'input.css'),
+        watch=settings.app_reload,
     )
     yield
     process.terminate()
@@ -43,3 +47,7 @@ async def send_to_login(request: Request, exc: HTTPException):
 async def redirect_on_validation_error(request: Request, _: RequestValidationError):
     referer = request.headers.get('referer', '/')
     return RedirectResponse(referer, status_code=303)
+
+
+if __name__ == '__main__':
+    uvicorn.run('app.main:app', port=settings.app_port, reload=settings.app_reload)

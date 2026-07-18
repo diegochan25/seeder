@@ -1,0 +1,62 @@
+<div class="contents" x-data="{ showPicker: false, dataLabel: 'Select a generator...', generator: '', generatorLabel: '' }">
+    <input type="hidden" name="generator" form="newField" x-model="generator">
+    <input type="hidden" name="generatorLabel" form="newField" x-model="generatorLabel">
+    <input 
+        type="checkbox"
+        x-model="showPicker"
+        class="appearance-none flex items-center w-sm before:content-[attr(data-label)] before:flex-1 after:content-chevron-right after:rotate-0 checked:after:rotate-90 after:duration-150"
+        x-bind:data-label="dataLabel"
+    >
+    <button 
+        type="button" 
+        class="fixed inset-0 opacity-0 cursor-default"
+        x-show="showPicker" 
+        x-on:click="showPicker=false"
+    ></button>
+    <div 
+        class="absolute top-8 right-0 z-10 flex flex-col h-max max-h-100 bg-zinc-800 border border-zinc-600 rounded-lg overflow-hidden shadow-md shadow-zinc-950"
+        x-data="{ search: '', selectedType: '{{ types[0].__name__ if types else '' }}' }"
+        x-show="showPicker"
+        x-transition:enter="transition duration-150 ease-out"
+        x-transition:enter-start="opacity-0 -translate-y-2"
+        x-transition:enter-end="opacity-100 translate-y-0"
+        x-transition:leave="transition duration-100 ease-in"
+        x-transition:leave-start="opacity-100 translate-y-0"
+        x-transition:leave-end="opacity-0 -translate-y-2"
+    >
+        <div class="px-4 py-3 border-b border-zinc-600">
+            <div class="flex items-center gap-2">
+                <i class="bi bi-search text-xs text-zinc-500"></i>
+                <input type="text" name="search" id="search" autocomplete="off" placeholder="Search generators..."
+                    class="w-lg flex-1 focus:outline-0 placeholder:text-zinc-500" x-model="search">
+                <button type="button" title="Clear search" x-on:click="search = ''">
+                    <i class="bi bi-x-lg text-xs text-zinc-500"></i>
+                </button>
+            </div>
+        </div>
+        <div class="flex flex-1 min-h-0">
+            <div class="flex-2 py-4 *:px-4 border-r border-zinc-600 overflow-y-auto">
+                {% for type in types %}
+                    <input type="radio" name="types" value="{{ type.__name__ }}" data-label="{{ type.label }}" x-model="selectedType"
+                        class="appearance-none flex items-center w-full py-2 text-zinc-500 hover:text-white before:flex-1 before:content-[attr(data-label)] after:content-[''] after:size-1.5 after:rounded-full after:bg-transparent checked:after:bg-yellow-300 hover:bg-zinc-700 duration-150">
+                {% endfor %}
+            </div>
+            <div class="flex-5 py-4 overflow-y-auto">
+                {% for name, gs in generators | items %}
+                    <ul role="radiogroup" class="*:px-4" x-show="selectedType === '{{ name }}'" x-cloak>
+                        {% for generator in gs %}
+                            <input 
+                                type="radio" 
+                                name="generators" 
+                                value="{{ generator.__name__ }}" 
+                                data-label="{{ generator.label }}"
+                                class="appearance-none flex items-center w-full py-2 text-zinc-500 hover:text-white before:flex-1 before:content-[attr(data-label)] after:content-[''] after:size-1.5 after:rounded-full after:bg-transparent checked:after:bg-yellow-300 hover:bg-zinc-700 duration-150"
+                                x-on:change="showPicker = false; dataLabel = '{{generator.label}}'; generator=$el.value; generatorLabel = $el.dataset.label;"
+                            >
+                        {% endfor %}
+                    </ul>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>

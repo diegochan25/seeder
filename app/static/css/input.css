@@ -1,5 +1,9 @@
 @import 'tailwindcss';
 
+[x-cloak] {
+    display: none;
+}
+
 @font-face {
     src: url('/static/font/JetBrainsMono-VariableFont_wght.ttf') format('truetype');
     font-family: 'JetBrains Mono';
@@ -28,6 +32,19 @@
 @utility bg-plus-pattern {
     background-color: var(--color-zinc-800);
     background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%2352525b' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+
+@utility content-empty {
+    content: '';
+}
+
+@utility content-chevron-right {
+    --tw-content: url('/static/img/chevron-right.svg');
+    content: var(--tw-content);
+}
+
+@utility transition-discrete {
+    transition-behavior: allow-discrete;
 }
 
 body {
@@ -229,6 +246,10 @@ i.bi {
     &:hover {
         text-decoration: underline;
     }
+
+    &.link-error {
+        color: var(--color-red-400);
+    }
 }
 
 .dialog {
@@ -280,4 +301,58 @@ i.bi {
             }
         }
     }
+}
+
+.custom-select {
+    display: block;
+    position: relative;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.5rem;
+    width: var(--container-3xs);
+    outline-width: 2px;
+    outline-style: solid;
+    outline-color: transparent;
+    transition: outline 150ms linear;
+
+    &:focus-within {
+        outline-color: var(--color-blue-500);
+    }
+}
+
+details, details::details-content {
+    interpolate-size: allow-keywords;
+}
+
+details summary {
+    display: flex;
+    align-items: center;
+    & :first-child {
+        flex: 1;
+    }
+
+    &::after {
+        content: url('/static/img/chevron-right.svg');
+        cursor: pointer;
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        height: fit-content;
+        width: fit-content;
+        rotate: 0;
+        transition: rotate 200ms linear;
+    }
+}
+
+details[open] summary::after {
+    rotate: 90deg;
+}
+
+details::details-content {
+    overflow: hidden;
+    height: 0;
+    transition: height 300ms ease, content-visibility 300ms allow-discrete;
+}
+
+details[open]::details-content {
+    height: auto;
 }

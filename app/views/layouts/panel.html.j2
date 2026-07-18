@@ -13,7 +13,7 @@
 </header>
 <div class="flex flex-1">
     <aside class="h-full w-80 border-r border-zinc-600">
-        <nav class="flex flex-col py-8 *:px-6">
+        <nav class="flex flex-col py-8 *:px-6 space-y-4">
             <div class="flex items-center">
                 <h3 class="flex-1 text-sm font-bold uppercase text-zinc-500">
                     Seeds&nbsp;&middot;&nbsp;<span>{{ seeds | length }}</span>
@@ -24,6 +24,32 @@
                 </button>
                 {% endcall %}
             </div>
+            <ul>
+                {% for seed in seeds %}
+                    {% set seed_href = '/seeds/{}'.format(seed.slug) %}
+                    {% set schemas = grouped_schemas[seed._id] %}
+                    <li>
+                        <details class="space-y-2" open>
+                            <summary class="px-2 py-1 list-none border-l-2 {{'border-yellow-400 text-yellow-400 bg-yellow-400/10' if request.url.path == seed_href else 'border-transparent text-zinc-200'}}">
+                                <a href="{{seed_href}}">
+                                    {{seed.name}}
+                                </a>
+                            </summary>
+                            <ul class="space-y-1">
+                            {% for schema in schemas %}
+                                {% set schema_href = '/seeds/{}/schemas/{}'.format(seed.slug, schema.slug) %}
+                                <li>
+                                    <a
+                                        href="{{schema_href}}"
+                                        class="block py-1 border-l-2 px-4 {{'border-yellow-400 text-yellow-400 bg-yellow-400/10' if request.url.path == schema_href else 'border-transparent text-zinc-400'}}"
+                                    >{{schema.name}}</a>
+                                </li>
+                            {% endfor %}
+                            </ul>
+                        </details>
+                    </li>
+                {% endfor %}
+            </ul>
         </nav>
     </aside>
     <main class="flex-1">

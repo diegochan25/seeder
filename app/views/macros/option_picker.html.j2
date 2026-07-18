@@ -1,0 +1,40 @@
+{% macro option_picker(options) %}
+<div class="contents" x-data="{ showPicker: false, dataLabel: 'View options' }">
+    <input 
+        type="checkbox"
+        x-model="showPicker"
+        class="appearance-none flex items-center w-sm before:content-[attr(data-label)] before:flex-1 after:content-chevron-right after:rotate-0 checked:after:rotate-90 after:duration-150"
+        x-bind:data-label="dataLabel"
+    >
+    <button 
+        type="button" 
+        class="fixed inset-0 opacity-0 cursor-default"
+        x-show="showPicker" 
+        x-on:click="showPicker=false"
+    ></button>
+    <div 
+        class="w-full absolute top-8 right-0 z-10 p-4 grid grid-cols-2 h-max max-h-100 bg-zinc-800 border border-zinc-600 rounded-lg overflow-hidden shadow-md shadow-zinc-950"
+        x-data="{ search: '', selectedType: '{{ types[0].__name__ if types else '' }}' }"
+        x-show="showPicker"
+        x-transition:enter="transition duration-150 ease-out"
+        x-transition:enter-start="opacity-0 -translate-y-2"
+        x-transition:enter-end="opacity-100 translate-y-0"
+        x-transition:leave="transition duration-100 ease-in"
+        x-transition:leave-start="opacity-100 translate-y-0"
+        x-transition:leave-end="opacity-0 -translate-y-2"
+    >
+        {% for option in options %}
+            <div class="block space-y-1">
+                <label for="{{ option.name }}" class="block text-sm text-zinc-400 uppercase font-bold">{{ option.label }}</label>
+                {% if option.__name__ == 'TextOption' %}
+                    <input 
+                        type="text" 
+                        name="{{ option.name }}" 
+                        id="{{ option.name }}"
+                    >
+                {% endif %}
+            </div>
+        {% endfor %}
+    </div>
+</div>    
+{% endmacro %}
