@@ -77,6 +77,26 @@
                     <input type="submit" value="Add field" class="btn btn-primary" form="newField">
                 </td>      
             </tr>
+            <tr class="rounded-lg overflow-hidden bg-zinc-800/75">
+                 <td class="border-y first:border-l first:rounded-l-lg last:border-r last:rounded-r-lg border-zinc-600 px-4 py-3">
+                    <input
+                        type="text" 
+                        form="newField" 
+                        name="fieldName" 
+                        id="fieldName"
+                        placeholder="field name"
+                        class="px-2 py-1 rounded-lg w-2xs border border-zinc-600 outline-2 outline-transparent hover:outline-blue-500 duration-150 placeholder:italic"
+                    >
+                </td>
+                <td class="border-y first:border-l first:rounded-l-lg last:border-r last:rounded-r-lg border-zinc-600 px-4 py-3">
+                    <label class="custom-select">
+                        <input type="checkbox" id="select-opener" class="hidden">
+                        <span id="selected-content">&nbsp;</span>
+                    </label>
+                </td>
+                <td class="border-y first:border-l first:rounded-l-lg last:border-r last:rounded-r-lg border-zinc-600 px-4 py-3">
+                </td>           
+            </tr>
         </tbody>
         <tfoot>
             <tr>
