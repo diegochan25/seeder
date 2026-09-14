@@ -1,0 +1,10 @@
+@import 'tailwindcss';
+
+body {
+    background-color: var(--color-zinc-900);
+    color: white;
+}
+
+button, a, input[type="submit"], input[type="reset"] {
+    cursor: pointer;
+}

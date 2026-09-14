@@ -15,7 +15,7 @@ class Settings(BaseSettings):
     app_port: int
     log_level: Literal['debug', 'trace', 'info', 'warn', 'warning', 'error', 'fatal', 'critical']
 
-    db_driver = 'postgresql+asyncpg'
+    db_driver: str = 'postgresql+asyncpg'
     db_user: str
     db_password: str
     db_host: str
