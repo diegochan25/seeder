@@ -1,14 +1,13 @@
-import re
 from abc import ABC
 from typing import Protocol, runtime_checkable
-from app.core.html import Selector
+
 
 @runtime_checkable
 class SupportsGeneration(Protocol):
+    name: str
     options: dict
 
-    @classmethod
-    def generate(cls): 
+    def generate(self): 
         ...
 
 class SupportsHTMLUserInput[T](ABC):

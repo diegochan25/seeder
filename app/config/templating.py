@@ -49,7 +49,10 @@ def render(
     response = templates.TemplateResponse(
         request,
         filename,
-        {**context, 'flash': flash_data},
+        {
+            **context, 
+            'flash': flash_data
+        },
         headers=headers,
         status_code=status_code,
         media_type=content_type

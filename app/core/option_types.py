@@ -6,6 +6,8 @@ class Textbox(SupportsHTMLUserInput[str]):
 
 
 class Date(SupportsHTMLUserInput[date]):
+    __selector__ = 'input[type="date"]'
+
     def to_html(pyvalue: date) -> str:
         return pyvalue.strftime('%Y-%m-%d')
 
@@ -14,6 +16,8 @@ class Date(SupportsHTMLUserInput[date]):
 
 
 class DateTime(SupportsHTMLUserInput[datetime]):
+    __selector__ = 'input[type="datetime-local"]'
+
     def to_html(pyvalue: datetime) -> str:
         return pyvalue.strftime('%Y-%m-%dT%H:%M:%S')
 
@@ -22,6 +26,8 @@ class DateTime(SupportsHTMLUserInput[datetime]):
 
 
 class Number(SupportsHTMLUserInput[float]):
+    __selector__ = 'input[type="number"]'
+
     def to_html(pyvalue: float) -> str:
         return str(pyvalue)
     def to_python(htmlvalue: str) -> float:
