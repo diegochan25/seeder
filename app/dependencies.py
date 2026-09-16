@@ -1,11 +1,13 @@
 import logging
 from contextlib import asynccontextmanager
 from typing import AsyncGenerator, Annotated
-from fastapi import Depends, Request
+from fastapi import Depends, HTTPException, Request, status
 from sqlalchemy.ext.asyncio import AsyncSession
+from app import services
 from app.config.db import engine
 from app.config.settings import Settings, get_settings
-from app.schemas.internal import ClientInfo, PaginationParams
+from app.core.consts import PYSESSID
+from app.schemas.internal import ClientInfo, PaginationParams, Session as SessionSchema
 
 logger = logging.getLogger(__name__)
 
@@ -54,6 +56,21 @@ async def get_pagination(request: Request):
 
 
 RequiresDB = Annotated[AsyncSession, Depends(get_session)]
+
+
+async def get_current_session(request: Request, db: RequiresDB) -> SessionSchema:
+    pysessid = request.cookies.get(PYSESSID)
+    if not pysessid:
+        raise HTTPException(status.HTTP_401_UNAUTHORIZED, 'Not authenticated.')
+
+    session = await services.auth.find_valid_session(db, pysessid)
+    if session is None:
+        raise HTTPException(status.HTTP_401_UNAUTHORIZED, 'Not authenticated.')
+
+    return SessionSchema.from_session(session)
+
+
+RequiresSession = Annotated[SessionSchema, Depends(get_current_session)]
 
 RequiresSettings = Annotated[Settings, Depends(get_settings)]
 

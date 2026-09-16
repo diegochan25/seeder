@@ -15,8 +15,8 @@ class Schema(Model):
     name: Mapped[str] = mapped_column(String(255))
     description: Mapped[str] = mapped_column(Text)
     index: Mapped[int] = mapped_column(Integer)
+    
     user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey('users.id'))
-
     user: Mapped['User'] = relationship(back_populates='schemas')
 
     @property

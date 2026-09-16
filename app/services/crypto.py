@@ -21,5 +21,5 @@ def sha256hmac(text: str, key: str | None = None) -> str:
 
 def sha256compare(text: str, hashed: str, key: str | None = None) -> bool:
     if key is None:
-        hmac.compare_digest(sha256hash(text), hashed)
+        return hmac.compare_digest(sha256hash(text), hashed)
     return hmac.compare_digest(sha256hmac(text, key), hashed)

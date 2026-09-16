@@ -7,6 +7,7 @@ from app.models.user import User
 from fastapi import Response
 from sqlalchemy import UUID, select
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import selectinload
 
 
 PYSESSID_COOKIE_ARGS = {
@@ -20,6 +21,17 @@ PYSESSID_COOKIE_ARGS = {
 
 async def find_by_email(db: AsyncSession, email: str) -> User | None:
     stmt = select(User).where(User.email == email)
+    result = await db.execute(stmt)
+    return result.scalar_one_or_none()
+
+async def find_valid_session(db: AsyncSession, pysessid: str) -> Session | None:
+    stmt = (
+        select(Session)
+        .options(selectinload(Session.user))
+        .where(Session.pysessid == pysessid)
+        .where(Session.revoked_at.is_(None))
+        .where(Session.expires_at > utcnow())
+    )
     result = await db.execute(stmt)
     return result.scalar_one_or_none()
 

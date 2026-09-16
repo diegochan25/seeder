@@ -5,12 +5,16 @@ from fastapi.responses import RedirectResponse
 from app import services
 from app.config.templating import render
 from app.core.consts import LONG_SESSION, SHORT_SESSION
-from app.dependencies import RequiresDB, RequiresClientInfo
+from app.dependencies import RequiresDB, RequiresClientInfo, RequiresSession
 from app.schemas.internal import FlashMessage
 from app.schemas.mvc import AuthUser
 
 
 router = APIRouter(prefix='/auth')
+
+@router.get('/')
+async def me(session: RequiresSession):
+    return session.user
 
 @router.get('/login')
 async def render_login(request: Request):
