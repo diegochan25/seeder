@@ -1,3 +1,8 @@
+from datetime import datetime, timezone
+
+def utcnow() -> datetime:
+    return datetime.now(timezone.utc)
+
 class ReadonlyKVP[K, V]:
     _key: K
     _value: V

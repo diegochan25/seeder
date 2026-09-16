@@ -1,5 +1,6 @@
 import logging
-from typing import Annotated
+from contextlib import asynccontextmanager
+from typing import AsyncGenerator, Annotated
 from fastapi import Depends, Request
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.config.db import engine
@@ -10,7 +11,7 @@ logger = logging.getLogger(__name__)
 
 settings = get_settings()
 
-async def get_session():
+async def get_session() -> AsyncGenerator[AsyncSession, None]:
     try:
         async with AsyncSession(engine) as session:
             yield session
@@ -19,6 +20,11 @@ async def get_session():
         logger.exception(e)
         await session.rollback()
         raise RuntimeError('An error occurred during a database session.') from e
+
+
+# FastAPI drives `get_session` itself via `Depends` since it detects yield-dependencies;
+# this wrapper is for direct `async with` usage outside of request handling (e.g. scripts).
+get_session_context = asynccontextmanager(get_session)
 
 
 async def get_client_info(request: Request):

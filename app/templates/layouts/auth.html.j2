@@ -1,0 +1,11 @@
+{% extends layout('base.html.j2') %}
+
+{% block body %}
+<div class="w-screen h-screen overflow-hidden flex items-stretch bg-zinc-400 gap-px">
+    <div class="flex-1 h-full bg-zinc-100"></div>
+    <div class="flex-1 h-full p-12 flex justify-center items-center bg-white">
+        {% block content %}
+        {% endblock %}
+    </div>
+</div>
+{% endblock %}

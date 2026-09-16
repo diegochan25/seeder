@@ -1,2 +1,49 @@
-<aside>
+<aside class="w-80 bg-white border-r border-zinc-300 shadow-sm shadow-zinc-300" x-data="{showForm: false}">
+    {% include partial('_new_schema.html.j2') %}
+    <div class="p-4">
+        {% include partial('_logo.html.j2') %}
+    </div>
+    <hr class="border-t border-zinc-300">
+    <nav class="px-2 py-4 space-y-2">
+        {% set schema_count = 0 %} {# TODO replace with schema count #}
+        <details class="rounded-lg" open>
+            <summary
+                class="rounded-lg px-1 py-2 cursor-pointer hover:bg-zinc-100 duration-150 flex items-center text-sm uppercase list-none marker:hidden"
+            >
+                <p class="flex-1 font-semibold">Schemas</p>
+                <span class="font-mono text-zinc-600">{{ schema_count }}</span>
+            </summary>
+            <section class="p-2">
+                {% if collection_count %}
+                {% else %}
+                <div class="space-y-3">
+                    <div class="w-full bg-zinc-100 rounded-lg border border-dashed border-zinc-400 p-4 text-sm">
+                        <p class="text-center text-zinc-500">
+                            Nothing here yet. A schema is a list of fields —
+                            <code class="px-1 py-0.5 bg-zinc-200 rounded-lg">users</code>,
+                            <code class="px-1 py-0.5 bg-zinc-200 rounded-lg">orders</code>,
+                            whatever you need fixtures for.
+                        </p>
+                    </div>
+                    <button
+                        class="block w-full px-3 py-1 rounded-lg bg-yellow-300 hover:bg-yellow-400 duration-150 font-medium text-center shadow-xs shadow-zinc-200"
+                        x-on:click="showForm = true"
+                    >
+                        New Schema
+                    </button>
+                </div>
+                {% endif %}
+            </section>
+        </details>
+        {% set collection_count = 0 %} {# TODO replace with collection count #}
+        <details class="rounded-lg">
+            <summary
+                class="rounded-lg px-1 py-2 cursor-pointer hover:bg-zinc-100 duration-150 flex items-center text-sm uppercase list-none marker:hidden">
+                <p class="flex-1 font-semibold">Collections</p>
+                <span class="font-mono text-zinc-600">{{ collection_count }}</span>
+            </summary>
+            <section>
+            </section>
+        </details>
+    </nav>
 </aside>

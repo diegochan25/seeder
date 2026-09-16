@@ -1,10 +1,12 @@
-import json
+from typing import overload
 from fastapi import HTTPException, Request, Response
+from pydantic import ValidationError
+from app.core.consts import FLASH
+from app.schemas.internal import FlashMessage
 
-FLASH_KEY = 'flash'
 
 FLASH_COOKIE_ARGS = {
-    'key': FLASH_KEY,
+    'key': FLASH,
     'path': '/',
     'domain': None,
     'max_age': 10,
@@ -13,23 +15,23 @@ FLASH_COOKIE_ARGS = {
     'samesite': 'none'
 }
 
-def send(data: str | dict, response: Response | None = None):
-    payload = json.dumps(data)
+@overload
+def send[T: Response](message: FlashMessage, response: T) -> T: ...
+@overload
+def send(message: FlashMessage, response: None) -> Response: ...
+def send[T: Response | None](message: FlashMessage, response: T = None) -> T | Response:
     if response is None:
         response = Response()
-    response.set_cookie(**FLASH_COOKIE_ARGS, value=payload)
+    response.set_cookie(**FLASH_COOKIE_ARGS, value=message.stringify())
     return response
 
-def included(request: Request) -> bool:
-    return request.cookies.get(FLASH_KEY) is not None
-
-def read(request: Request) -> str | dict:
-    flash = request.cookies.get(FLASH_KEY)
+def read(request: Request) -> FlashMessage | None:
+    flash = request.cookies.get(FLASH)
     if not flash:
-        return ''
+        return None
     try:
-        return json.loads(flash)
-    except json.JSONDecodeError as e:
+        return FlashMessage.parse(flash)
+    except ValidationError as e:
         raise HTTPException('services.flash: Flash cookie\'s value is malformed.') from e
 
 def clear(response: Response):

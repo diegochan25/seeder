@@ -1,3 +1,5 @@
+{% from macro('_alert.html.j2') import alert %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,7 +16,11 @@
     <link rel="stylesheet" href="/static/css/output.css">
     <title>{% block title %}Seeder{% endblock %}</title>
 </head>
-<body x-init="$nextTick(() => lucide.createIcons())" x-data>
+<body x-init="$nextTick(() => lucide.createIcons())" x-data="{showAlert: true}">
+    {% if flash %}
+        {{ alert(flash.type, flash.message) }}
+    {% endif %}
+
     {% block body %}
     {% endblock %}
 </body>
