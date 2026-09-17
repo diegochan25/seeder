@@ -1,8 +1,8 @@
-import re
 from abc import ABC
 from dataclasses import dataclass, field
 from typing import ClassVar, Protocol, runtime_checkable
-from markupsafe import Markup, escape
+from markupsafe import Markup
+from app.core.html import Selector
 
 
 @dataclass
@@ -21,19 +21,17 @@ class SupportsHTMLUserInput[T](ABC):
         return htmlvalue
 
     def render(self, form_id: str | None = None) -> Markup:
-        tag, _, rest = self.__selector__.partition('[')
-        attrs = dict(re.findall(r'(\w+)="([^"]*)"', rest))
-        attrs['name'] = self.name
-        attrs['id'] = self.name
+        sel = Selector.from_selector(self.__selector__)
+        sel.id = self.name
+        sel.attr.name = self.name
         if form_id is not None:
-            attrs['form'] = form_id
+            sel.attr.form = form_id
         if not self.optional:
-            attrs['required'] = 'required'
+            sel.attr.required = True
         if self.default is not None:
-            attrs['value'] = self.to_html(self.default)
+            sel.attr.value = self.to_html(self.default)
 
-        attr_str = ' '.join(f'{key}="{escape(value)}"' for key, value in attrs.items())
-        return Markup(f'<{tag} {attr_str}>')
+        return Markup(sel.tag())
 
 
 @runtime_checkable

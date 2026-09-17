@@ -88,7 +88,7 @@
                             Options
                         </button>
                         <div
-                            class="absolute z-30 top-full left-0 mt-1 w-64 space-y-2 bg-white rounded-lg border border-zinc-200 shadow-md shadow-zinc-300 p-3"
+                            class="absolute z-30 top-full left-0 mt-1 w-80 space-y-2 bg-white rounded-lg border border-zinc-200 shadow-md shadow-zinc-300 p-3"
                             x-show="showOptions"
                             x-on:click.outside="showOptions = false"
                             x-transition
@@ -97,7 +97,7 @@
                                 <fieldset
                                     x-show="generator === '{{ gen.name }}'"
                                     :disabled="generator !== '{{ gen.name }}'"
-                                    class="space-y-2"
+                                    class="space-y-4"
                                 >
                                     {% for option in gen.options %}
                                         {{ option_input(option, 'newField') }}

@@ -1,7 +1,8 @@
 from abc import ABC
 from enum import StrEnum
+import uuid
 
-from app.core.option_types import Select, Textbox
+from app.core.option_types import Range, Select, Textbox, Toggle
 
 
 class StringGenerator(ABC):
@@ -24,9 +25,19 @@ class RandomUUID(StringGenerator):
 
     options = [
         Select(name='version', label='Version', choices=UUIDVersions, default=UUIDVersions.UUID4),
-        Textbox(name='name', label='Name', optional=True),
+        Textbox(name='uuid_name', label='Name', optional=True),
         Textbox(name='namespace', label='Namespace', optional=True),
+        Toggle(name='optional', label='Optional', default=False),
+        Range(name='null_ratio', label='Null ratio', default=10.0, optional=True)
     ]
 
-    def generate(self):
-        ...
+    def generate(self, options: dict):
+        version = options.get('version')
+        name = options.get('name')
+        namespace = options.get('namespace')
+
+        if (version == '5' or version == '6') and (not name or not namespace):
+            raise ValueError('UUID versions 5 and 6 require a name and namespace to be passed in')
+
+            
+        
