@@ -1,0 +1,12 @@
+{% macro option_input(option, form_id) %}
+    <div class="space-y-1">
+        <label for="{{ option.name }}" class="block text-sm font-medium">
+            {{ option.label or option.name }}
+            {% if option.optional %}
+                &nbsp;
+                <span class="font-normal text-zinc-500">optional</span>
+            {% endif %}
+        </label>
+        {{ option.render(form_id) }}
+    </div>
+{% endmacro %}

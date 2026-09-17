@@ -15,7 +15,7 @@
             <h2 class="text-xl font-semibold">New schema</h2>
             <p class="text-zinc-500">A schema is a named list of fields. You'll add the fields next.</p>
         </div>
-        <form action="/schemas/" method="post" class="space-y-4">
+        <form action="/schemas/" method="post" class="space-y-4" x-on:submit="showForm = false">
             <div class="space-y-2">
                 <div class="space-y-1" x-data="{schemaName: ''}">
                     <label for="name" class="block text-sm font-medium">Schema name</label>
@@ -49,7 +49,7 @@
                         x-on:click="showForm = false"
                     >
                     <input 
-                        type="reset" 
+                        type="submit" 
                         value="Add fields"
                         class="px-3 py-1 rounded-lg border border-yellow-300 bg-yellow-300 hover:bg-yellow-400 duration-150 font-medium text-center shadow-xs shadow-zinc-200"
                     >

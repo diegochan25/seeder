@@ -18,6 +18,7 @@ class Schema(Model):
     
     user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey('users.id'))
     user: Mapped['User'] = relationship(back_populates='schemas')
+    fields: Mapped[list['Field']] = relationship(back_populates='schema')
 
     @property
     def slug(self) -> str:
@@ -27,7 +28,7 @@ class Schema(Model):
 
     @property
     def path(self) -> str:
-        return path.join(self.autoid, self.slug)
+        return path.join(str(self.autoid), self.slug)
 
 
 class Field(Model):
@@ -35,3 +36,6 @@ class Field(Model):
     type: Mapped[str] = mapped_column(String(255))
     generator: Mapped[str] = mapped_column(String(255))
     options: Mapped[dict] = mapped_column(JSONB, default=dict)
+
+    schema_id: Mapped[uuid.UUID] = mapped_column(ForeignKey('schemas.id'))
+    schema: Mapped[Schema] = relationship(back_populates='fields')

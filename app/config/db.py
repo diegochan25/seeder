@@ -5,7 +5,7 @@ settings = get_settings()
 
 engine = create_async_engine(
     url=settings.db_url,
-    echo=settings.python_env == 'development',
+    echo=False,
     pool_size=5,
     max_overflow=8,
     pool_timeout=30,

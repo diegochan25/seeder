@@ -9,7 +9,6 @@ FLASH_COOKIE_ARGS = {
     'key': FLASH,
     'path': '/',
     'domain': None,
-    'max_age': 10,
     'secure': True,
     'httponly': True,
     'samesite': 'none'
@@ -22,7 +21,7 @@ def send(message: FlashMessage, response: None) -> Response: ...
 def send[T: Response | None](message: FlashMessage, response: T = None) -> T | Response:
     if response is None:
         response = Response()
-    response.set_cookie(**FLASH_COOKIE_ARGS, value=message.stringify())
+    response.set_cookie(**FLASH_COOKIE_ARGS, max_age= 10, value=message.stringify())
     return response
 
 def read(request: Request) -> FlashMessage | None:
@@ -32,7 +31,7 @@ def read(request: Request) -> FlashMessage | None:
     try:
         return FlashMessage.parse(flash)
     except ValidationError as e:
-        raise HTTPException('services.flash: Flash cookie\'s value is malformed.') from e
+        raise HTTPException(status_code=400, detail='services.flash: Flash cookie\'s value is malformed.') from e
 
 def clear(response: Response):
     response.delete_cookie(**FLASH_COOKIE_ARGS)

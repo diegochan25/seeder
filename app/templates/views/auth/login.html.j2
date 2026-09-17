@@ -16,7 +16,7 @@
         </p>
     </div>
     <form action="/auth/login" method="post" class="space-y-6">
-        <div class="space-y-2" x-data="{email: '{{ form.email }}'}">
+        <div class="space-y-2" x-data="{email: '{{ new_login.email }}'}">
             <label for="email" class="block text-sm font-medium">Email address</label>
             <div class="w-full flex items-center gap-2 px-2 py-1 border border-zinc-300 rounded-lg outline-2 outline-transparent has-focus:outline-yellow-300 duration-150">
                 <input 
@@ -28,7 +28,7 @@
                 >
             </div>
         </div>    
-        <div class="space-y-2" x-data="{password: '{{ form.password }}', visible: false}">
+        <div class="space-y-2" x-data="{password: '{{ new_login.password }}', visible: false}">
             <div class="w-full flex items-center text-sm">
                 <label for="password" class="flex-1 font-medium">Password</label>
                 <a href="/auth/password/forgot" class="text-yellow-600 hover:text-yellow-700 hover:underline">Forgot password?</a>
@@ -47,7 +47,7 @@
                 </button>
             </div>
         </div>
-        <div x-data="{rememberMe: {{ form.remember_me | lower }}}">
+        <div x-data="{rememberMe: {{ new_login.remember_me | lower }}}">
             <label for="rememberMe" class="flex items-center gap-4">
                 <div class="rounded-md size-5 border border-neutral-400 flex justify-center items-center cursor-pointer bg-white hover:bg-neutral-100 duration-150">
                     <i data-lucide="check" x-show="rememberMe" class="text-blue-500" x-transition></i>

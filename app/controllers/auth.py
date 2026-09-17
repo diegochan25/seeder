@@ -1,5 +1,4 @@
 from typing import Annotated
-
 from fastapi import APIRouter, Form, Request
 from fastapi.responses import RedirectResponse
 from app import services
@@ -17,9 +16,13 @@ async def me(session: RequiresSession):
     return session.user
 
 @router.get('/login')
-async def render_login(request: Request):
+async def render_login(request: Request, db: RequiresDB):
+    if (pysessid := request.cookies.get('pysessid')) is not None:
+        if await services.auth.find_valid_session(db, pysessid) is not None:
+            return RedirectResponse('/', status_code=303)
+
     login = AuthUser.empty()
-    return render(request, 'views/auth/login.html.j2', form=login)
+    return render(request, 'views/auth/login.html.j2', new_login=login)
 
 @router.post('/login', status_code=200)
 async def auth_user(request: Request, data: Annotated[AuthUser, Form()], db: RequiresDB, client_info: RequiresClientInfo):
@@ -28,7 +31,7 @@ async def auth_user(request: Request, data: Annotated[AuthUser, Form()], db: Req
     to_login = render(
         request,
         'views/auth/login.html.j2',
-        form=data,
+        new_login=data,
         status_code=401,
         flash=FlashMessage(type='error', message='Please check your credentials and try again.'),
     )
@@ -49,6 +52,6 @@ async def auth_user(request: Request, data: Annotated[AuthUser, Form()], db: Req
         client_info.user_agent
     )
 
-    response = RedirectResponse('/')
+    response = RedirectResponse('/', status_code=303)
     services.auth.set_session_cookie(response, pysessid, max_age)
     return response

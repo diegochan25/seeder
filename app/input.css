@@ -37,6 +37,13 @@
     font-display: swap;
 }
 
+@utility bg-pattern {
+    background-color: var(--color-neutral-100);
+    opacity: 0.8;
+    background-image: radial-gradient(circle, var(--color-neutral-400), 1.2px, transparent 1.2px);
+    background-size: 15px 15px;
+}
+
 body {
     background-color: var(--color-gray-100);
     color: black;

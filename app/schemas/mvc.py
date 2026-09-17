@@ -31,4 +31,7 @@ class CreateSchema(BaseModel):
     @classmethod
     def empty(cls) -> Self:
         return cls(name='', description=None)
-    
+
+class CreateField(BaseModel):
+    name: str
+    generator: str

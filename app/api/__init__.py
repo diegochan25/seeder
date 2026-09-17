@@ -10,7 +10,7 @@ def health():
 
 @router.get('/ready')
 def ready():
-    { 'status_code': 501, 'message': 'This route has not been implemented.' }
+    return { 'status_code': 501, 'message': 'This route has not been implemented.' }
 
 
 router.include_router(v1.router)

@@ -1,0 +1,128 @@
+{% extends layout('panel.html.j2') %}
+{% from macro('_option_input.html.j2') import option_input %}
+
+{% block title %}Schema: {{schema.name | default('<unknown>')}} | Seeder{% endblock %}
+
+    {% block content %}
+    <div class="space-y-2">
+        <div class="flex items-center gap-4">
+            <h1 class="font-mono text-2xl font-semibold">{{ schema.name }}</h1>
+            <span class="px-3 py-0.5 rounded-full bg-gray-200 text-zinc-500 font-medium">{{ schema.fields | count }}
+                fields</span>
+        </div>
+        <p class="text-neutral-500">Add one row per field. A schema can generate as soon as every field has a generator.
+        </p>
+    </div>
+    <div class="rounded-lg shadow-sm shadow-zinc-300" x-data="{showForm: true, generator: ''}">
+        <form id="newField" action="/schemas/{{schema.path}}/fields/" method="post" class="hidden"></form>
+        <table class="w-full border border-zinc-300 border-separate border-spacing-0 rounded-lg">
+            <thead>
+                <tr class="rounded-t-lg">
+                    <th
+                        class="first:rounded-tl-lg last:rounded-tr-lg px-4 py-2 bg-zinc-50 text-sm border-b border-zinc-300 font-semibold text-zinc-500 text-left">
+                        Field
+                    </th>
+                    <th
+                        class="first:rounded-tl-lg last:rounded-tr-lg px-4 py-2 bg-zinc-50 text-sm border-b border-zinc-300 font-semibold text-zinc-500 text-left">
+                        Type
+                    </th>
+                    <th
+                        class="first:rounded-tl-lg last:rounded-tr-lg px-4 py-2 bg-zinc-50 text-sm border-b border-zinc-300 font-semibold text-zinc-500 text-left">
+                        Options
+                    </th>
+                    <th
+                        class="first:rounded-tl-lg last:rounded-tr-lg px-4 py-2 bg-zinc-50 text-sm border-b border-zinc-300 font-semibold text-zinc-500 text-left">
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for field in schema.fields %}
+                    <tr>
+                        <td class="px-4 py-2 bg-white border-b border-zinc-300">
+                            
+                        </td>
+                        <td class="px-4 py-2 bg-white border-b border-zinc-300">
+                            
+                        </td>
+                        <td class="px-4 py-2 bg-white border-b border-zinc-300">
+                            
+                        </td>
+                    </tr>
+                {% endfor %}
+                <tr x-show="showForm" x-transition> 
+                    <td class="px-4 py-2 bg-white border-b border-zinc-300">
+                        <input 
+                            type="text" 
+                            name="name" 
+                            id="name" 
+                            form="newField"
+                            class="px-2 py-1 border border-zinc-200 rounded-md outline-2 outline-transparent focus:outline-yellow-300 duration-150"
+                        >
+                    </td>
+                    <td class="px-4 py-2 bg-white border-b border-zinc-300">
+                        <select
+                            name="generator"
+                            id="generator"
+                            form="newField"
+                            x-model="generator"
+                            class="px-2 py-1 border border-zinc-200 rounded-md outline-2 outline-transparent focus:outline-yellow-300 duration-150"
+                        >
+                            <option value="" hidden>Select a generator&hellip;</option>
+                            {% for type, gens in generators.values() | groupby('type') %}
+                                <optgroup label="{{ type | capitalize }}">
+                                    {% for gen in gens %}
+                                        <option value="{{ gen.name }}">{{ gen.label }}</option>
+                                    {% endfor %}
+                                </optgroup>
+                            {% endfor %}
+                        </select>
+                    </td>
+                    <td class="relative px-4 py-2 bg-white border-b border-zinc-300" x-data="{showOptions: false}">
+                        <button
+                            type="button"
+                            class="flex items-center gap-1 text-yellow-600 disabled:text-zinc-400 disabled:cursor-not-allowed"
+                            x-on:click="showOptions = !showOptions"
+                            :disabled="!generator"
+                        >
+                            <i data-lucide="settings-2" class="size-4"></i>
+                            Options
+                        </button>
+                        <div
+                            class="absolute z-30 top-full left-0 mt-1 w-64 space-y-2 bg-white rounded-lg border border-zinc-200 shadow-md shadow-zinc-300 p-3"
+                            x-show="showOptions"
+                            x-on:click.outside="showOptions = false"
+                            x-transition
+                        >
+                            {% for gen in generators.values() %}
+                                <fieldset
+                                    x-show="generator === '{{ gen.name }}'"
+                                    :disabled="generator !== '{{ gen.name }}'"
+                                    class="space-y-2"
+                                >
+                                    {% for option in gen.options %}
+                                        {{ option_input(option, 'newField') }}
+                                    {% endfor %}
+                                </fieldset>
+                            {% endfor %}
+                        </div>
+                    </td>
+                    <td class="px-4 py-2 bg-white border-b border-zinc-300">
+                        <button type="reset" form="newField" class="p-0.5 rounded-lg hover:bg-zinc-100 duration-150" x-on:click="showForm = false">
+                            <i data-lucide="x" class="size-5"></i>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr class="rounded-b-lg">
+                    <td colspan="9999" class="px-4 py-2 bg-white rounded-b-lg">
+                        <button class="flex items-center gap-1 text-yellow-600" x-on:click="showForm = true">
+                            <i data-lucide="plus" class="size-4"></i>
+                            Add field
+                        </button>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+    {% endblock %}

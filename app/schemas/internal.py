@@ -1,6 +1,6 @@
 from typing import Literal, Self
 from pydantic import BaseModel, Field
-from sqlalchemy import UUID
+from uuid import UUID
 from app.models.user import User
 from app.models.session import Session as InternalSession
 
@@ -14,6 +14,8 @@ class FlashMessage(BaseModel):
 
     def stringify(self) -> str:
         return self.model_dump_json()
+
+flash = FlashMessage
     
 class ClientInfo(BaseModel):
     ip_address: str | None
@@ -39,8 +41,8 @@ class SessionUser(BaseModel):
 
 class Session(BaseModel):
     user: SessionUser
-    ip_address: str | None
-    user_agent: str | None
+    ip_address: str | None = None
+    user_agent: str | None = None
     data: dict
 
     @property
@@ -50,4 +52,9 @@ class Session(BaseModel):
 
     @classmethod
     def from_session(cls, session: InternalSession) -> InternalSession:
-        return cls(user=SessionUser.from_user(session.user), data=session.data)
+        return cls(
+            user=SessionUser.from_user(session.user), 
+            data=session.data,
+            ip_address=session.ip_address,
+            user_agent=session.user_agent
+        )

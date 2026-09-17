@@ -7,7 +7,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi_tailwind import tailwind
 from app import api, controllers
 from app.config.settings import get_settings
-
+from app.core.exception_handlers import handle_unauthorized
 
 ROOT_DIR = Path(__file__).resolve().parent.parent
 settings = get_settings()
@@ -37,6 +37,8 @@ app.mount('/static', static_files, name='static')
 
 app.include_router(api.router)
 app.include_router(controllers.router)
+
+app.add_exception_handler(401, handle_unauthorized)
 
 def main():
     uvicorn.run(
