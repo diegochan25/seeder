@@ -7,7 +7,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app import services
 from app.config.db import engine
 from app.config.settings import Settings, get_settings
-from app.core.consts import PYSESSID
+from app.core.consts import CSRF_TOKEN, PYSESSID
 from app.schemas.internal import ClientInfo, PaginationParams, Session as SessionSchema
 
 logger = logging.getLogger(__name__)
@@ -57,19 +57,45 @@ async def get_pagination(request: Request):
 RequiresDB = Annotated[AsyncSession, Depends(get_session)]
 
 
-async def get_current_session(request: Request, db: RequiresDB) -> SessionSchema:
+async def get_current_session(request: Request, db: RequiresDB) -> SessionSchema | None:
     pysessid = request.cookies.get(PYSESSID)
     if not pysessid:
-        raise HTTPException(401, detail='Not authenticated.')
+        return None
 
     session = await services.auth.find_valid_session(db, pysessid)
     if session is None:
-        raise HTTPException(401, detail='Not authenticated.')
+        return None
 
     return SessionSchema.from_session(session)
 
 
-RequiresSession = Annotated[SessionSchema, Depends(get_current_session)]
+async def require_current_session(request: Request, db: RequiresDB) -> SessionSchema:
+    session = await get_current_session(request, db)
+    if session is None:
+        raise HTTPException(401, detail='Not authenticated.')
+
+    return session
+
+
+RequiresSession = Annotated[SessionSchema, Depends(require_current_session)]
+
+async def verify_csrf_token(request: Request):
+    if request.method.lower() in ['post', 'put', 'patch']:
+        forbidden = HTTPException(403, detail='You are not allowed to perform this action.')
+        pysessid = request.cookies.get(PYSESSID)
+        form = await request.form()
+        csrf_token = form.get(CSRF_TOKEN)
+
+        if pysessid is None or csrf_token is None:
+            raise forbidden
+
+        if not services.crypto.sha256compare(pysessid, csrf_token, key=settings.secret_key):
+            raise forbidden
+
+async def load_schemas(request: Request, db: RequiresDB) -> None:
+    session = await get_current_session(request, db)
+    request.state.session = session
+    request.state.schemas = await services.schemas.own(db, session.user_id) if session else []
 
 RequiresSettings = Annotated[Settings, Depends(get_settings)]
 

@@ -34,6 +34,8 @@
     --spacing: 0.25rem;
     --container-md: 28rem;
     --container-xl: 36rem;
+    --text-xs: 0.75rem;
+    --text-xs--line-height: calc(1 / 0.75);
     --text-sm: 0.875rem;
     --text-sm--line-height: calc(1.25 / 0.875);
     --text-lg: 1.125rem;
@@ -272,6 +274,10 @@
     width: calc(var(--spacing) * 5);
     height: calc(var(--spacing) * 5);
   }
+  .size-10 {
+    width: calc(var(--spacing) * 10);
+    height: calc(var(--spacing) * 10);
+  }
   .h-full {
     height: 100%;
   }
@@ -467,9 +473,6 @@
   .border-neutral-400 {
     border-color: var(--color-neutral-400);
   }
-  .border-yellow-300 {
-    border-color: var(--color-yellow-300);
-  }
   .border-zinc-200 {
     border-color: var(--color-zinc-200);
   }
@@ -503,9 +506,6 @@
   .bg-yellow-100 {
     background-color: var(--color-yellow-100);
   }
-  .bg-yellow-300 {
-    background-color: var(--color-yellow-300);
-  }
   .bg-zinc-50 {
     background-color: var(--color-zinc-50);
   }
@@ -514,6 +514,9 @@
   }
   .bg-zinc-200 {
     background-color: var(--color-zinc-200);
+  }
+  .bg-zinc-300 {
+    background-color: var(--color-zinc-300);
   }
   .bg-zinc-400 {
     background-color: var(--color-zinc-400);
@@ -595,6 +598,10 @@
     font-size: var(--text-xl);
     line-height: var(--tw-leading, var(--text-xl--line-height));
   }
+  .text-xs {
+    font-size: var(--text-xs);
+    line-height: var(--tw-leading, var(--text-xs--line-height));
+  }
   .font-medium {
     --tw-font-weight: var(--font-weight-medium);
     font-weight: var(--font-weight-medium);
@@ -663,16 +670,6 @@
     --tw-shadow: 0 1px 3px 0 var(--tw-shadow-color, rgb(0 0 0 / 0.1)), 0 1px 2px -1px var(--tw-shadow-color, rgb(0 0 0 / 0.1));
     box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
   }
-  .shadow-xs {
-    --tw-shadow: 0 1px 2px 0 var(--tw-shadow-color, rgb(0 0 0 / 0.05));
-    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
-  }
-  .shadow-zinc-200 {
-    --tw-shadow-color: oklch(92% 0.004 286.32);
-    @supports (color: color-mix(in lab, red, red)) {
-      --tw-shadow-color: color-mix(in oklab, var(--color-zinc-200) var(--tw-shadow-alpha), transparent);
-    }
-  }
   .shadow-zinc-300 {
     --tw-shadow-color: oklch(87.1% 0.006 286.286);
     @supports (color: color-mix(in lab, red, red)) {
@@ -739,13 +736,6 @@
       }
     }
   }
-  .hover\:bg-yellow-400 {
-    &:hover {
-      @media (hover: hover) {
-        background-color: var(--color-yellow-400);
-      }
-    }
-  }
   .hover\:bg-zinc-100 {
     &:hover {
       @media (hover: hover) {
@@ -767,12 +757,6 @@
       }
     }
   }
-  .focus\:outline-0 {
-    &:focus {
-      outline-style: var(--tw-outline-style);
-      outline-width: 0px;
-    }
-  }
   .focus\:outline-yellow-300 {
     &:focus {
       outline-color: var(--color-yellow-300);
@@ -786,11 +770,6 @@
   .disabled\:text-zinc-400 {
     &:disabled {
       color: var(--color-zinc-400);
-    }
-  }
-  .has-focus\:outline-yellow-300 {
-    &:has(*:focus) {
-      outline-color: var(--color-yellow-300);
     }
   }
 }
@@ -828,6 +807,65 @@ body {
 }
 button, a, input[type="submit"], input[type="reset"] {
   cursor: pointer;
+}
+.input-wrapper {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.25rem 0.5rem;
+  border: 1px solid var(--color-zinc-300);
+  border-radius: 0.5rem;
+  outline: 2px solid transparent;
+  transition: all 150ms ease;
+  &:has(*:focus) {
+    outline-color: var(--color-yellow-300);
+  }
+}
+.wrapped-input {
+  border: none;
+  flex: 1 1 0%;
+  &:focus {
+    outline: none;
+  }
+}
+.btn {
+  padding: 0.25rem 0.75rem;
+  border-radius: 0.5rem;
+  border-width: 1px;
+  border-style: solid;
+  font-weight: 500;
+  text-align: center;
+  box-shadow: 0 1px 2px 0 var(--color-zinc-200);
+  transition: all 150ms ease;
+}
+.btn-primary {
+  color: black;
+  border-color: var(--color-yellow-300);
+  background-color: var(--color-yellow-300);
+  &:hover {
+    border-color: var(--color-yellow-400);
+    background-color: var(--color-zinc-100);
+  }
+}
+.btn-ghost {
+  color: black;
+  border-color: var(--color-zinc-400);
+  background-color: white;
+  &:hover {
+    border-color: var(--color-zinc-500);
+    background-color: var(--color-yellow-400);
+  }
+}
+.btn-disabled {
+  cursor: not-allowed;
+}
+.btn-bouncy {
+  transform: translateY(0);
+  transition: all 150ms ease;
+  &:active {
+    transform: translateY(0.25rem);
+  }
 }
 .form-control {
   width: 100%;

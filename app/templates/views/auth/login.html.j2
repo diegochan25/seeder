@@ -18,12 +18,12 @@
     <form action="/auth/login" method="post" class="space-y-6">
         <div class="space-y-2" x-data="{email: '{{ new_login.email }}'}">
             <label for="email" class="block text-sm font-medium">Email address</label>
-            <div class="w-full flex items-center gap-2 px-2 py-1 border border-zinc-300 rounded-lg outline-2 outline-transparent has-focus:outline-yellow-300 duration-150">
-                <input 
-                    type="email" 
-                    id="email" 
-                    name="email" 
-                    class="flex-1 focus:outline-0" 
+            <div class="input-wrapper">
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    class="wrapped-input"
                     x-model="email"
                 >
             </div>
@@ -33,12 +33,12 @@
                 <label for="password" class="flex-1 font-medium">Password</label>
                 <a href="/auth/password/forgot" class="text-yellow-600 hover:text-yellow-700 hover:underline">Forgot password?</a>
             </div>
-            <div class="w-full flex items-center gap-2 px-2 py-1 border border-zinc-300 rounded-lg outline-2 outline-transparent has-focus:outline-yellow-300 duration-150">
-                <input 
+            <div class="input-wrapper">
+                <input
                     x-bind:type="visible ? 'text' : 'password'"
-                    id="password" 
-                    name="password" 
-                    class="flex-1 focus:outline-0" 
+                    id="password"
+                    name="password"
+                    class="wrapped-input"
                     x-model="password"
                 >
                 <button type="button" x-on:click="visible = !visible">
@@ -57,7 +57,7 @@
             </label>
         </div>  
         <div>
-            <input type="submit" value="Sign in" class="w-full border border-yellow-300 px-3 py-2 rounded-lg bg-yellow-300 hover:bg-yellow-400 font-medium duration-150 shadow-xs shadow-zinc-200">
+            <input type="submit" value="Sign in" class="btn btn-primary w-full">
         </div> 
     </form>
     <div class="relative">
@@ -69,11 +69,11 @@
         </div>
     </div>
     <div class="space-y-4">
-        <a href="" class="w-full px-3 py-2 rounded-lg border border-neutral-400 flex justify-center items-center gap-2">
+        <a href="" class="btn btn-ghost w-full flex justify-center items-center gap-2">
             <img src="/static/svg/github.svg" class="size-5">
             Continue with GitHub
         </a>
-        <a href="" class="w-full px-3 py-2 rounded-lg border border-neutral-400 flex justify-center items-center gap-2">
+        <a href="" class="btn btn-ghost w-full flex justify-center items-center gap-2">
             <img src="/static/svg/google.svg" class="size-5">
             Continue with Google
         </a>

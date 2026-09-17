@@ -54,6 +54,77 @@ button, a, input[type="submit"], input[type="reset"] {
 }
 
 
+.input-wrapper {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.25rem 0.5rem;
+    border: 1px solid var(--color-zinc-300);
+    border-radius: 0.5rem;
+    outline: 2px solid transparent;
+    transition: all 150ms ease;
+
+    &:has(*:focus) {
+        outline-color: var(--color-yellow-300);
+    }
+}
+
+.wrapped-input {
+    border: none;
+    flex: 1 1 0%;
+
+    &:focus {
+        outline: none;
+    }
+}
+
+
+.btn {
+    padding: 0.25rem 0.75rem;
+    border-radius: 0.5rem;
+    border-width: 1px;
+    border-style: solid;
+    font-weight: 500;
+    text-align: center;	
+    box-shadow: 0 1px 2px 0 var(--color-zinc-200);
+    transition: all 150ms ease;
+}
+
+.btn-primary {
+    color: black;
+    border-color: var(--color-yellow-300);
+    background-color: var(--color-yellow-300);
+
+    &:hover {
+        border-color: var(--color-yellow-400);
+        background-color: var(--color-zinc-100);      
+    }
+}
+
+.btn-ghost {
+    color: black;
+    border-color: var(--color-zinc-400);
+    background-color: white;
+
+    &:hover {
+        border-color: var(--color-zinc-500);
+        background-color: var(--color-yellow-400);      
+    }
+}
+
+.btn-disabled {
+    cursor: not-allowed;
+}
+
+.btn-bouncy {
+    transform: translateY(0);
+    transition: all 150ms ease;
+
+    &:active {
+        transform: translateY(0.25rem);
+    }
+}
 
 .form-control {
     width: 100%;

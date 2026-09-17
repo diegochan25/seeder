@@ -5,7 +5,7 @@ from app.core.utils import utcnow
 from app.models.session import Session
 from app.models.user import User
 from fastapi import Response
-from sqlalchemy import UUID, select
+from sqlalchemy import UUID, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
@@ -56,4 +56,13 @@ async def create_session(
 
 def set_session_cookie(response: Response, pysessid: str, max_age: timedelta) -> Response:
     response.set_cookie(**PYSESSID_COOKIE_ARGS, value=pysessid, max_age=int(max_age.total_seconds()))
+    return response
+
+async def revoke_session(db: AsyncSession, pysessid: str):
+    stmt = update(Session).where(Session.pysessid == pysessid).values(revoked_at=utcnow(), expires_at=utcnow() - timedelta(hours=1))
+    await db.execute(stmt)
+    await db.flush()
+
+def delete_session_cookie(response: Response) -> Response:
+    response.delete_cookie(**PYSESSID_COOKIE_ARGS)
     return response

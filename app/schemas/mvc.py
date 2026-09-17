@@ -19,6 +19,10 @@ class AuthUser(BaseModel):
     def empty(cls) -> Self:
         return cls(email='', password='', remember_me=False)
 
+class UpdateUser(BaseModel):
+    first_name: str | None = None
+    last_name: str | None = None
+
 class CreateSchema(BaseModel):
     name: str
     description: str | None = None

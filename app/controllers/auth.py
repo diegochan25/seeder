@@ -1,11 +1,11 @@
 from typing import Annotated
-from fastapi import APIRouter, Form, Request
+from fastapi import APIRouter, Cookie, Form, Request
 from fastapi.responses import RedirectResponse
 from app import services
 from app.config.templating import render
 from app.core.consts import LONG_SESSION, SHORT_SESSION
 from app.dependencies import RequiresDB, RequiresClientInfo, RequiresSession
-from app.schemas.internal import FlashMessage
+from app.schemas.internal import flash
 from app.schemas.mvc import AuthUser
 
 
@@ -33,7 +33,7 @@ async def auth_user(request: Request, data: Annotated[AuthUser, Form()], db: Req
         'views/auth/login.html.j2',
         new_login=data,
         status_code=401,
-        flash=FlashMessage(type='error', message='Please check your credentials and try again.'),
+        flash=flash(type='error', message='Please check your credentials and try again.'),
     )
 
     if user is None:
@@ -55,3 +55,12 @@ async def auth_user(request: Request, data: Annotated[AuthUser, Form()], db: Req
     response = RedirectResponse('/', status_code=303)
     services.auth.set_session_cookie(response, pysessid, max_age)
     return response
+
+@router.get('/logout', status_code=204)
+def logout(db: RequiresDB, pysessid: str | None = Cookie(None)):
+    if pysessid is not None:
+        services.auth.revoke_session(db, pysessid)
+
+    response = RedirectResponse('/auth/login', status_code=303)
+    services.auth.delete_session_cookie(response)
+    return services.flash.send(flash(type='success', message='You\'ve been successfully logged out.'), response=response)

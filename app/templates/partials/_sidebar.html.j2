@@ -1,20 +1,28 @@
-<aside class="w-80 bg-white border-r border-zinc-300 shadow-sm shadow-zinc-300" x-data="{showForm: false}">
+<aside class="w-80 flex flex-col bg-white border-r border-zinc-300 shadow-sm shadow-zinc-300" x-data="{showForm: false}">
     {% include partial('_new_schema.html.j2') %}
     <div class="p-4">
         {% include partial('_logo.html.j2') %}
     </div>
     <hr class="border-t border-zinc-300">
-    <nav class="px-2 py-4 space-y-2">
-        {% set schema_count = 0 %} {# TODO replace with schema count #}
+    <nav class="flex-1 px-2 py-4 space-y-2">
         <details class="rounded-lg" open>
             <summary
                 class="rounded-lg px-1 py-2 cursor-pointer hover:bg-zinc-100 duration-150 flex items-center text-sm uppercase list-none marker:hidden"
             >
                 <p class="flex-1 font-semibold">Schemas</p>
-                <span class="font-mono text-zinc-600">{{ schema_count }}</span>
+                <span class="font-mono text-zinc-600">{{ schemas | count }}</span>
             </summary>
             <section class="p-2">
-                {% if collection_count %}
+                {% if schemas | count %}
+                    <ul class="space-y-2">
+                        {% for schema in schemas | sort(True, False, 'updated_at') | slice(5) | first %}
+                            <li>
+                                <a href="/schemas/{{schema.path}}" class="block font-mono rounded-lg p-2 hover:bg-zinc-100 duration-150">
+                                    {{ schema.name }}
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
                 {% else %}
                 <div class="space-y-3">
                     <div class="w-full bg-zinc-100 rounded-lg border border-dashed border-zinc-400 p-4 text-sm">
@@ -26,7 +34,7 @@
                         </p>
                     </div>
                     <button
-                        class="block w-full px-3 py-1 rounded-lg bg-yellow-300 hover:bg-yellow-400 duration-150 font-medium text-center shadow-xs shadow-zinc-200"
+                        class="btn btn-primary block w-full"
                         x-on:click="showForm = true"
                     >
                         New Schema
@@ -46,4 +54,34 @@
             </section>
         </details>
     </nav>
+    {% if session %}
+        <hr class="border-t border-zinc-300">
+        <div class="p-2">
+            <div class="flex items-center gap-2" x-data="{ showUserForm: false }">
+                <div class="flex-1 flex items-center gap-2">
+                    <button
+                        title="Edit profile"
+                        class="flex-1 flex gap-2  p-2 rounded-lg hover:bg-zinc-100 duration-150" 
+                        x-on:click="showUserForm = true"
+                    >
+                        <picture class="block size-10 rounded-full bg-zinc-300">
+                            <img src="" alt="">
+                        </picture>
+                        <div class="space-y-1 text-left">
+                            <h4 class="text-sm font-semibold">{{ session.user.username }}</h4>
+                            <p class="text-zinc-500 text-xs uppercase">{{ session.user.role }}</p>
+                        </div>
+                    </button>
+                    <a
+                        href="/auth/logout"
+                        title="Log out"
+                        class="p-2 rounded-lg hover:bg-zinc-100 duration-150"
+                        x-on:click="if (!confirm('Are you sure you want to log out?')) $event.preventDefault()"
+                    >
+                        <i data-lucide="log-out"></i>
+                    </a>
+                </div>
+            </figure>
+        </div>
+    {% endif %}
 </aside>

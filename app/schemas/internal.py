@@ -32,12 +32,38 @@ class PaginationParams(BaseModel):
 
 class SessionUser(BaseModel):
     id: UUID
+    autoid: int
     email: str
     role: str
+    first_name: str | None = None
+    last_name: str | None = None
 
     @classmethod
     def from_user(cls, user: User) -> SessionUser:
-        return cls(id=user.id, email=user.email, role=str(user.role))
+        return cls(
+            id=user.id,
+            autoid=user.autoid,
+            email=user.email,
+            role=str(user.role), 
+            first_name=user.first_name, 
+            last_name=user.last_name
+        )
+
+    @property
+    def full_name(self) -> str:
+        if not self.first_name: # Do not use only last name
+            return ''
+        full = self.first_name
+        if self.last_name:
+            full += ' ' + self.last_name
+        return full
+
+    @property
+    def username(self) -> str:
+        if self.full_name:
+            return self.full_name
+        else:
+            return self.email
 
 class Session(BaseModel):
     user: SessionUser

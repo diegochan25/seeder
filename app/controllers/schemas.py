@@ -13,7 +13,7 @@ router = APIRouter(prefix='/schemas')
 
 @router.get('/')
 async def index(request: Request, db: RequiresDB, session: RequiresSession):
-    schemas = services.schemas.own(db, session.user_id)
+    schemas = await services.schemas.own(db, session.user_id)
     return render(request, 'views/schemas/index.html.j2', schemas=schemas)
 
 @router.get('/{autoid}/{_}')
