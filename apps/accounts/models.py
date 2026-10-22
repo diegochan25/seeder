@@ -1,10 +1,30 @@
 from typing import TYPE_CHECKING
 from django.db import models
-from django.contrib.auth.base_user import AbstractBaseUser
+from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.contrib.auth.models import PermissionsMixin
 
 if TYPE_CHECKING:
     from django.db.models.fields.related_descriptors import RelatedManager, ManyRelatedManager
+    from apps.schemas.models import Schema
+
+
+class UserManager(BaseUserManager):
+    def _create_user(self, email: str, password: str, admin: bool = False, **kwargs):
+        if not email:
+            raise ValueError('The email field must be set')
+        user = self.model(email=self.normalize_email(email), is_superuser=admin, **kwargs)
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
+    def create_user(self, email: str, password: str, **kwargs):
+        kwargs.pop('admin', None)
+        return self._create_user(email, password, admin=False, **kwargs)
+
+    def create_superuser(self, email: str, password: str, **kwargs):
+        kwargs.pop('admin', None)
+        return self._create_user(email, password, admin=True, **kwargs)
+
 
 class User(AbstractBaseUser, PermissionsMixin):
     id = models.BigAutoField(primary_key=True)
@@ -18,10 +38,12 @@ class User(AbstractBaseUser, PermissionsMixin):
     updated_at = models.DateTimeField(auto_now=True)
 
     # Annotations
-    userrole_set: 'ManyRelatedManager[UserRole]'
+    userrole_set: 'ManyRelatedManager[RoleAssignment]'
     accounttoken_set: 'RelatedManager[AccountToken]'
+    schema_set: 'RelatedManager[Schema]'
 
     USERNAME_FIELD = 'email'
+    objects = UserManager()
 
     def initials(self) -> str:
         initials = ''
@@ -31,11 +53,18 @@ class User(AbstractBaseUser, PermissionsMixin):
             initials += self.last_name[0].upper()
         return initials
 
-class UserRole(models.Model):
+    class Meta:
+        db_table = 'users'
+
+
+class RoleAssignment(models.Model):
     pk = models.CompositePrimaryKey('user_id', 'role_id')
 
-    user = models.ForeignKey('User', on_delete=models.CASCADE)
-    role = models.ForeignKey('Role', on_delete=models.CASCADE)
+    user = models.ForeignKey('User', on_delete=models.CASCADE, db_index=True)
+    role = models.ForeignKey('Role', on_delete=models.CASCADE, db_index=True)
+
+    class Meta:
+        db_table = 'role_assignments'
 
 
 class Role(models.Model):
@@ -46,6 +75,9 @@ class Role(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = 'roles'
 
 
 class AccountToken(models.Model):

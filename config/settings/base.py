@@ -63,6 +63,10 @@ SMTP_STARTTLS = env.bool('SMTP_STARTTLS')
 
 DEBUG = PYTHON_ENV == 'development'
 
+LOGIN_URL = 'accounts:sign_in'
+
+LOGIN_REDIRECT_URL = 'schemas:index'
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -72,8 +76,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'tailwind',
     'apps.accounts',
+    'apps.api',
     'apps.core',
-    'apps.fields',
     'apps.schemas',
     'apps.theme'
 ]
@@ -125,7 +129,14 @@ TEMPLATES = [
 WSGI_APPLICATION = 'config.wsgi.application'
 
 DATABASES = {
-    'default': {}
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'USER': DB_USER,
+        'PASSWORD': DB_PASSWORD,
+        'HOST': DB_HOST,
+        'PORT': DB_PORT,
+        'NAME': DB_NAME
+    }
 }
 
 AUTH_USER_MODEL = 'accounts.User'
@@ -154,5 +165,20 @@ STATICFILES_DIRS = [BASE_DIR / 'static']
 MAILERS = {
     'default': {
         'BACKEND': 'django.core.mail.backends.console.EmailBackend'
+    }
+}
+
+STORAGES = {
+    'default': {
+        'BACKEND': 'storages.backends.s3.S3Storage',
+        'OPTIONS': {
+            'endpoint_url': S3_ENDPOINT,
+            'access_key': S3_ACCESS_KEY,
+            'secret_key': S3_SECRET_KEY,
+            'bucket_name': S3_BUCKET
+        }
+    },
+    'staticfiles': {
+        'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage',
     }
 }

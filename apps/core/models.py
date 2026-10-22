@@ -1,7 +1,7 @@
 from django.db import models
 
 
-class SampleNames(models.Model):
+class SampleName(models.Model):
     class Types(models.IntegerChoices):
         NAME = (0, 'name')
         SURNAME = (1, 'surname')

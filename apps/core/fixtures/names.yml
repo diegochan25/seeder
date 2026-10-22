@@ -1,0 +1,8 @@
+# Shape
+# - model: core.SampleName
+#   pk: 0
+#   fields:
+#     name: ''
+#     type: 0
+#     preferred_languages:
+#       -

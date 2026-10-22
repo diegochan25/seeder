@@ -11,11 +11,11 @@
     <script src="{{ static('vendor/htmx.min.js') }}" defer></script>
     <script src="{{ static('js/index.js') }}" data-lab-icons="{{ static('vendor/lucide-lab-icons.json') }}" defer></script>
     <script src="{{ static('vendor/alpine.min.js') }}" defer></script>
+    <link rel="shortcut icon" href="{{ static('icon.svg') }}" type="image/svg+xml">
     {% block head %}{% endblock %}
 </head>
 <body 
-    class="w-full h-screen overflow-hidden bg-surface-0 text-ink"
-    x-data="{activeDialog: null}"
+    class="w-full h-screen flex flex-col bg-white"
 >
     {% for message in messages %}
         {{ alert(message) }}

@@ -1,0 +1,94 @@
+{% extends global_layout('base.html.j2') %}
+
+{% block body %}
+<div class="w-full h-full flex bg-ds-border-200 gap-px items-stretch">
+    <div class="hidden lg:flex bg-honeycomb flex-1 flex-col justify-center p-12">
+        <div class="flex flex-col gap-1">
+            <span class="text-ds-text-link w-max px-2 rounded-lg bg-ds-accent-tint border border-ds-text-link">Database-independent fixtures</span>
+            <h1 class="text-4xl font-bold w-max max-w-2xl">
+                Describe your data once. Get realistic fixtures in whatever format the target wants.
+            </h1>
+        </div>
+    </div>
+    <div class="bg-white flex-1 flex flex-col justify-center items-center p-4 shrink-0">
+        <form method="post" action="{{ url('accounts:sign_in') }}" class="contents">
+            {{ csrf_input }}
+            <div class="w-full max-w-lg mx-auto space-y-8">
+                {# BEGIN logo #}
+                {% include global_partial('_logo.html.j2') %}
+                {# END logo #}
+                <div class="form-control">
+                    <h2 class="text-2xl font-semibold">Welcome back</h2>
+                    <p class="text-ds-text-200">
+                        Your schemas, generators and formatters 
+                        live on your account. Seeder never asks 
+                        for database credentials.
+                    </p>
+                </div>
+                <div class="space-y-4">
+                    <div class="form-control">
+                        <div class="label-wrapper">
+                            {{ form.email.label_tag() }}
+                        </div>
+                        <div class="input-wrapper">
+                            {{ form.email }}
+                        </div>
+                        <div class="text-sm {% if form.email.errors %}text-red-700{% else %}text-ds-text-200{% endif %}"> 
+                            {% if form.email.errors %}
+                                {{ form.email.errors }}
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="form-control" x-data="{visible: false}">
+                        <div class="label-wrapper">
+                            <div class="flex-1">{{ form.password.label_tag() }}</div>
+                            <a href="{{url('accounts:forgot_password') }}" class="text-ds-text-link hover:underline">Forgot password?</a>
+                        </div>
+                        <div class="input-wrapper">
+                            {{ form.password }}
+                            <button type="button" x-on:click="visible = !visible">
+                                <i data-lucide="eye" class="size-4 text-ds-accent" x-show="visible"></i>
+                                <i data-lucide="eye-closed" class="size-4 text-ds-text-200" x-show="!visible"></i>
+                            </button>
+                        </div>
+                        <div class="text-sm {% if form.password.errors %}text-red-700{% else %}text-ds-text-200{% endif %}"> 
+                            {% if form.password.errors %}
+                                {{ form.password.errors }}
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="form-control">
+                        <div class="flex items-center gap-2">
+                            {{ form.remember_me }}
+                            {{ form.remember_me.label_tag() }}
+                        </div>
+                        <div class="text-sm {% if form.remember_me.errors %}text-red-700{% else %}text-ds-text-200{% endif %}"> 
+                            {% if form.remember_me.errors %}
+                                {{ form.remember_me.errors }}
+                            {% endif %}
+                        </div>
+                    </div>
+                    <input type="submit" value="Log in" class="btn btn-full btn-primary">
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+
+{# seeder
+Welcome back
+
+Your schemas, generators and formatters live on your account. Seeder never asks for database credentials.
+Email
+dara@okonkwo.dev
+PasswordForgot password?
+••••••••••••Show
+✓
+Keep me signed in
+Sign in
+or
+Continue with GitHub
+Continue with Google
+New here? Create an account — free tier covers 10k objects per run. #}
